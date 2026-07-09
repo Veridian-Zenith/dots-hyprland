@@ -1,5 +1,5 @@
-pragma ComponentBehavior: Bound
 pragma Singleton
+pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
@@ -8,258 +8,130 @@ import qs.modules.common.functions
 
 Singleton {
     id: root
-    property QtObject darkColors
-    property QtObject lightColors
-    property QtObject colors
-    property QtObject radius
-    property QtObject font
-    property QtObject transition
-    property string iconsPath: `${Directories.assetsPath}/icons/fluent`
-    property bool dark: Appearance.m3colors.darkmode
 
-    readonly property bool transparencyEnabled: Config.options.appearance.transparency.enable
-    property real backgroundTransparency: transparencyEnabled ? 0.16 : 0
-    property real panelBackgroundTransparency: transparencyEnabled ? 0.14 : 0
-    property real panelLayerTransparency: root.dark ? 0.9 : 0.7
-    property real contentTransparency: root.dark ? 0.87 : 0.5
-    function applyBackgroundTransparency(col) {
-        return ColorUtils.applyAlpha(col, 1 - root.backgroundTransparency)
-    }
-    function applyContentTransparency(col) {
-        return ColorUtils.applyAlpha(col, 1 - root.contentTransparency)
-    }
-    lightColors: QtObject {
-        id: lightColors
-        property color bgPanelBody: "#F2F2F2"
-        property color bgPanelSeparator: "#E0E0E0"
-        property color bg0: "#EEEEEE"
-        property color bg0Border: '#BEBEBE'
-        property color bg1Base: "#F7F7F7"
-        property color bg1: "#F7F7F7"
-        property color bg1Hover: "#F7F7F7"
-        property color bg1Active: '#EFEFEF'
-        property color bg1Border: '#E9E9E9'
-        property color bg2: "#FBFBFB"
-        property color bg2Base: "#FBFBFB"
-        property color bg2Hover: '#ffffff'
-        property color bg2Active: '#eeeeee'
-        property color bg2Border: '#E0E0E0'
-        property color subfg: "#5C5C5C"
-        property color fg: "#000000"
-        property color fg1: "#626262"
-        property color inactiveIcon: "#C4C4C4"
-        property color controlBgInactive: '#555458'
-        property color controlBg: '#807F85'
-        property color controlBgHover: '#57575B'
-        property color controlFg: "#FFFFFF"
-        property color accentUnfocused: "#848484"
-        property color link: "#235CCF"
-        property color inputBg: ColorUtils.transparentize(bg0, 0.4)
-    }
-    darkColors: QtObject {
-        id: darkColors
-        property color bgPanelBody: '#242424'
-        property color bgPanelSeparator: "#191919"
-        property color bg0: "#1C1C1C"
-        property color bg0Border: "#404040"
-        property color bg1Base: '#2C2C2C'
-        property color bg1: '#2C2C2C'
-        property color bg1Hover: "#292929"
-        property color bg1Active: '#252525'
-        property color bg1Border: '#bebebe'
-        property color bg2Base: "#313131"
-        property color bg2: '#313131'
-        property color bg2Hover: '#363636'
-        property color bg2Active: '#2B2B2B'
-        property color bg2Border: '#404040'
-        property color subfg: "#CED1D7"
-        property color fg: "#FFFFFF"
-        property color fg1: "#D1D1D1"
-        property color inactiveIcon: "#494949"
-        property color controlBgInactive: "#CDCECF"
-        property color controlBg: "#9B9B9B"
-        property color controlBgHover: "#CFCED1"
-        property color controlFg: "#454545"
-        property color accentUnfocused: "#989898"
-        property color link: "#A7C9FC"
-        property color inputBg: ColorUtils.transparentize(darkColors.bg0, 0.5)
-    }
-    colors: QtObject {
-        id: colors
-        // Special
-        property color shadow: ColorUtils.transparentize('#161616', 0.62)
-        property color ambientShadow: ColorUtils.transparentize("#000000", 0.75)
-        property color bgPanelFooterBase: root.dark ? root.darkColors.bg0 : root.lightColors.bg0
-        property color bgPanelFooterBackground: ColorUtils.transparentize(root.dark ? root.darkColors.bg0 : root.lightColors.bg0, root.panelBackgroundTransparency)
-        property color bgPanelFooter: ColorUtils.transparentize(bgPanelFooterBackground, root.panelLayerTransparency)
-        property color bgPanelBodyBase: root.dark ? root.darkColors.bgPanelBody : root.lightColors.bgPanelBody
-        property color bgPanelBody: ColorUtils.solveOverlayColor(bgPanelFooterBackground,bgPanelBodyBase, 1 - root.panelLayerTransparency)
-        property color bgPanelSeparator: ColorUtils.solveOverlayColor(bgPanelBodyBase, root.dark ? root.darkColors.bgPanelSeparator : root.lightColors.bgPanelSeparator, 1 - root.panelBackgroundTransparency)
-        // Layer 0
-        property color bg0Base: root.dark ? root.darkColors.bg0 : root.lightColors.bg0
-        property color bg0: ColorUtils.transparentize(bg0Base, root.backgroundTransparency)
-        property color bg0Border: ColorUtils.transparentize(root.dark ? root.darkColors.bg0Border : root.lightColors.bg0Border, root.backgroundTransparency)
-        // Layer 1
-        property color bg1Base: root.dark ? root.darkColors.bg1 : root.lightColors.bg1
-        property color bg1: ColorUtils.solveOverlayColor(bg0Base, bg1Base, 1 - root.contentTransparency)
-        property color bg1Hover: ColorUtils.solveOverlayColor(bg0Base, root.dark ? root.darkColors.bg1Hover : root.lightColors.bg1Hover, 1 - root.contentTransparency)
-        property color bg1Active: ColorUtils.solveOverlayColor(bg0Base, root.dark ? root.darkColors.bg1Active : root.lightColors.bg1Active, 1 - root.contentTransparency)
-        property color bg1Border: ColorUtils.solveOverlayColor(bg0Base, root.dark ? root.darkColors.bg1Border : root.lightColors.bg1Border, 1 - root.contentTransparency)
-        // Layer 2
-        property color bg2Base: root.dark ? root.darkColors.bg2 : root.lightColors.bg2
-        property color bg2: ColorUtils.solveOverlayColor(bgPanelBodyBase, bg2Base, 1 - root.contentTransparency)
-        property color bg2Hover: ColorUtils.solveOverlayColor(bgPanelBodyBase, root.dark ? root.darkColors.bg2Hover : root.lightColors.bg2Hover, 1 - root.contentTransparency)
-        property color bg2Active: ColorUtils.solveOverlayColor(bgPanelBodyBase, root.dark ? root.darkColors.bg2Active : root.lightColors.bg2Active, 1 - root.contentTransparency)
-        property color bg2Border: ColorUtils.solveOverlayColor(bgPanelBodyBase, root.dark ? root.darkColors.bg2Border : root.lightColors.bg2Border, 1 - root.contentTransparency)
-        // Foreground / Text
-        property color subfg: root.dark ? root.darkColors.subfg : root.lightColors.subfg
-        property color fg: root.dark ? root.darkColors.fg : root.lightColors.fg
-        property color fg1: root.dark ? root.darkColors.fg1 : root.lightColors.fg1
-        property color inactiveIcon: root.dark ? root.darkColors.inactiveIcon : root.lightColors.inactiveIcon
-        property color link: root.dark ? root.darkColors.link : root.lightColors.link
+    readonly property QtObject colors: QtObject {
+        // Base backgrounds
+        property color bg0Base: Appearance.m3colors.m3background
+        property color bg0Border: ColorUtils.transparentize(Appearance.m3colors.m3primary, 0.85)
+        property color bg1: Appearance.colors.colLayer1
+        property color bg1Base: Appearance.colors.colLayer1Base
+        property color bg1Hover: Appearance.colors.colLayer1Hover
+        property color bg1Active: Appearance.colors.colLayer1Active
+        property color bg1Border: ColorUtils.transparentize(Appearance.m3colors.m3primary, 0.8)
+        property color bg2: Appearance.colors.colLayer2
+        property color bg2Base: Appearance.colors.colLayer2Base
+        property color bg2Hover: Appearance.colors.colLayer2Hover
+        property color bg2Active: Appearance.colors.colLayer2Active
+        property color bg2Border: ColorUtils.transparentize(Appearance.m3colors.m3primary, 0.75)
+        // Panel
+        property color bgPanelBody: Appearance.colors.colBackgroundSurfaceContainer
+        property color bgPanelFooter: Appearance.colors.colLayer1
+        property color bgPanelFooterBackground: Appearance.colors.colLayer1Base
+        property color bgPanelSeparator: ColorUtils.transparentize(Appearance.m3colors.m3primary, 0.7)
         // Controls
-        property color controlBgInactive: root.dark ? root.darkColors.controlBgInactive : root.lightColors.controlBgInactive
-        property color controlBg: root.dark ? root.darkColors.controlBg : root.lightColors.controlBg
-        property color controlBgHover: root.dark ? root.darkColors.controlBgHover : root.lightColors.controlBgHover
-        property color controlFg: root.dark ? root.darkColors.controlFg : root.lightColors.controlFg
-        property color inputBg: root.dark ? root.darkColors.inputBg : root.lightColors.inputBg
-        property color danger: "#C42B1C"
-        property color dangerActive: "#B62D1F"
-        property color warning: "#FF9900"
+        property color controlBg: Appearance.colors.colLayer2
+        property color controlBgInactive: Appearance.colors.colLayer1
+        property color controlFg: Appearance.colors.colOnSurface
         // Accent
-        property color accent: Appearance.colors.colPrimary
+        property color accent: Appearance.m3colors.m3primary
         property color accentHover: Appearance.colors.colPrimaryHover
         property color accentActive: Appearance.colors.colPrimaryActive
-        property color accentUnfocused: root.dark ? root.darkColors.accentUnfocused : root.lightColors.accentUnfocused
-        property color accentFg: ColorUtils.isDark(accent) ? "#FFFFFF" : "#000000"
-        property color selection: Appearance.colors.colPrimaryContainer
-        property color selectionFg: Appearance.colors.colOnPrimaryContainer
+        property color accentFg: Appearance.m3colors.m3onPrimary
+        // Text
+        property color fg: Appearance.m3colors.m3onSurface
+        property color fg1: Appearance.m3colors.m3onSurfaceVariant
+        property color subfg: Appearance.m3colors.m3outline
+        // Special
+        property color danger: Appearance.m3colors.m3error
+        property color link: Appearance.m3colors.m3primary
+        property color selection: ColorUtils.transparentize(Appearance.m3colors.m3primary, 0.7)
+        property color selectionFg: Appearance.m3colors.m3onPrimary
+        // Shadows
+        property color shadow: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.8)
+        property color ambientShadow: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.88)
     }
 
-    radius: QtObject {
-        id: radius
-        property int none: 0
-        property int small: 2
-        property int medium: 4
-        property int large: 8
-        property int xLarge: 12
-    }
-
-    font: QtObject {
-        id: font
-        property QtObject family: QtObject {
-            property string ui: "Noto Sans"
+    readonly property QtObject font: QtObject {
+        readonly property QtObject family: QtObject {
+            readonly property string ui: Appearance.font.family.main
+            readonly property string monospace: Appearance.font.family.monospace
         }
-        property QtObject weight: QtObject { // Noto is not Segoe, so we might use slightly different weights
-            property int thin: Font.Normal
-            property int regular: Font.Medium
-            property int strong: Font.DemiBold
-            property int stronger: (Font.DemiBold + 2*Font.Bold) / 3
-            property int strongest: Font.Bold
+        readonly property QtObject pixelSize: QtObject {
+            readonly property int normal: Appearance.font.pixelSize.normal
+            readonly property int large: Appearance.font.pixelSize.large
+            readonly property int larger: Appearance.font.pixelSize.larger
+            readonly property int huge: Appearance.font.pixelSize.huge
         }
-        property QtObject pixelSize: QtObject {
-            property real normal: 11
-            property real large: 13
-            property real larger: 15
-            property real xlarger: 17
+        readonly property QtObject weight: QtObject {
+            readonly property int regular: Font.Normal
+            readonly property int medium: Font.DemiBold
+            readonly property int bold: Font.Bold
         }
-        property QtObject variableAxes: QtObject {
-            property var ui: ({
-                "wdth": 25
-            })
+        readonly property QtObject variableAxes: QtObject {
+            readonly property var ui: Appearance.font.variableAxes.main
         }
     }
 
-    transition: QtObject {
-        id: transition
+    readonly property QtObject radius: QtObject {
+        readonly property int small: Appearance.rounding.small
+        readonly property int medium: Appearance.rounding.normal
+        readonly property int large: Appearance.rounding.large
+        readonly property int full: Appearance.rounding.full
+    }
 
-        property int velocity: 850
+    readonly property bool dark: Appearance.m3colors.darkmode
+    readonly property real backgroundTransparency: Appearance.backgroundTransparency
+    readonly property string iconsPath: Directories.assetsPath + "/icons/fluent"
 
-        property QtObject easing: QtObject {
-            property QtObject bezierCurve: QtObject {
-                readonly property list<real> easeInOut: [0.42,0.00,0.58,1.00,1,1]
-                readonly property list<real> easeIn: [0,1,1,1,1,1]
-                readonly property list<real> easeOut: [1,0,1,1,1,1]
+    readonly property QtObject transition: QtObject {
+        function createObject(parent) {
+            return Appearance.animation.elementMoveFast.numberAnimation.createObject(parent)
+        }
+        readonly property QtObject enter: QtObject {
+            function createObject(parent) {
+                return Appearance.animation.elementMoveEnter.numberAnimation.createObject(parent)
             }
         }
-
-        property Component color: Component {
-            ColorAnimation {
-                duration: 80
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+        readonly property QtObject resize: QtObject {
+            function createObject(parent) {
+                return Appearance.animation.elementResize.numberAnimation.createObject(parent)
             }
         }
-
-        property Component opacity: Component {
-            NumberAnimation {
-                duration: 120
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+        readonly property QtObject opacity: QtObject {
+            function createObject(parent) {
+                return Appearance.animation.elementMoveFast.numberAnimation.createObject(parent)
             }
         }
-
-        property Component resize: Component { // TODO: better curve needed
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+        readonly property QtObject move: QtObject {
+            function createObject(parent) {
+                return Appearance.animation.elementMove.numberAnimation.createObject(parent)
             }
         }
-
-        property Component enter: Component {
-            NumberAnimation {
-                duration: 250
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+        readonly property QtObject longMovement: QtObject {
+            function createObject(parent) {
+                return Appearance.animation.elementMove.numberAnimation.createObject(parent)
             }
         }
-
-        property Component exit: Component {
-            NumberAnimation {
-                duration: 250
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeOut
+        readonly property QtObject scroll: QtObject {
+            function createObject(parent) {
+                return Appearance.animation.scroll.numberAnimation.createObject(parent)
             }
         }
-
-        property Component move: Component {
-            NumberAnimation {
-                duration: 170
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeInOut
+        readonly property QtObject rotate: QtObject {
+            function createObject(parent) {
+                return Appearance.animation.elementMoveFast.numberAnimation.createObject(parent)
             }
         }
-
-        property Component rotate: Component {
-            NumberAnimation {
-                duration: 170
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeInOut
+        readonly property QtObject anchor: QtObject {
+            function createObject(parent) {
+                return Appearance.animation.elementResize.numberAnimation.createObject(parent)
             }
         }
-
-        property Component anchor: Component {
-            AnchorAnimation {
-                duration: 160
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeIn
-            }
-        }
-
-        property Component longMovement: Component {
-            NumberAnimation {
-                duration: 1000
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeIn
-            }
-        }
-
-        property Component scroll: Component {
-            NumberAnimation {
-                duration: 250
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: [0.0, 0.0, 0.25, 1.0, 1, 1]
+        readonly property QtObject easing: QtObject {
+            readonly property QtObject bezierCurve: QtObject {
+                readonly property list<real> easeIn: Appearance.animationCurves.emphasizedAccel
+                readonly property list<real> easeOut: Appearance.animationCurves.emphasizedDecel
+                readonly property list<real> easeInOut: Appearance.animationCurves.emphasized
             }
         }
     }

@@ -10,7 +10,7 @@ import Qt.labs.synchronizer
 Item {
     id: root
     required property var scopeRoot
-    property int sidebarPadding: 10
+    property int sidebarPadding: 6
     anchors.fill: parent
     property bool aiChatEnabled: Config.options.policies.ai !== 0
     property bool translatorEnabled: Config.options.sidebar.translator.enable
@@ -21,20 +21,26 @@ Item {
         ...(root.translatorEnabled ? [{"icon": "translate", "name": Translation.tr("Translator")}] : []),
         ...((root.animeEnabled && !root.animeCloset) ? [{"icon": "bookmark_heart", "name": Translation.tr("Anime")}] : [])
     ]
-    property int tabCount: swipeView.count
+    property int tabCount: pages.length
+    property var pages: []
 
     function focusActiveItem() {
-        swipeView.currentItem.forceActiveFocus()
+        if (tabBar.currentIndex >= 0 && tabBar.currentIndex < pages.length) {
+            let page = pages[tabBar.currentIndex]
+            if (page) page.forceActiveFocus()
+        }
     }
 
     Keys.onPressed: (event) => {
         if (event.modifiers === Qt.ControlModifier) {
             if (event.key === Qt.Key_PageDown) {
-                swipeView.incrementCurrentIndex()
+                if (tabBar.currentIndex < pages.length - 1)
+                    tabBar.setCurrentIndex(tabBar.currentIndex + 1)
                 event.accepted = true;
             }
             else if (event.key === Qt.Key_PageUp) {
-                swipeView.decrementCurrentIndex()
+                if (tabBar.currentIndex > 0)
+                    tabBar.setCurrentIndex(tabBar.currentIndex - 1)
                 event.accepted = true;
             }
         }
@@ -55,40 +61,46 @@ Item {
                 id: tabBar
                 Layout.alignment: Qt.AlignHCenter
                 tabButtonList: root.tabButtonList
-                currentIndex: swipeView.currentIndex
             }
         }
 
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            implicitWidth: swipeView.implicitWidth
-            implicitHeight: swipeView.implicitHeight
             radius: Appearance.rounding.normal
             color: Appearance.colors.colLayer1
+            clip: true
 
-            SwipeView { // Content pages
-                id: swipeView
+            Item {
+                id: pageContainer
                 anchors.fill: parent
-                spacing: 10
-                currentIndex: tabBar.currentIndex
+                property var pages: []
 
-                clip: true
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: Rectangle {
-                        width: swipeView.width
-                        height: swipeView.height
-                        radius: Appearance.rounding.small
+                function showPage(index: int) {
+                    for (let i = 0; i < pages.length; i++)
+                        pages[i].visible = (i === index)
+                }
+
+                Connections {
+                    target: tabBar
+                    function onCurrentIndexChanged() {
+                        pageContainer.showPage(tabBar.currentIndex)
                     }
                 }
 
-                contentChildren: [
-                    ...(root.aiChatEnabled ? [aiChat.createObject()] : []),
-                    ...(root.translatorEnabled ? [translator.createObject()] : []),
-                    ...((root.tabButtonList.length === 0 || (!root.aiChatEnabled && !root.translatorEnabled && root.animeCloset)) ? [placeholder.createObject()] : []),
-                    ...(root.animeEnabled ? [anime.createObject()] : []),
-                ]
+                Component.onCompleted: {
+                    function addPage(comp) {
+                        let page = comp.createObject(pageContainer, {
+                            visible: false,
+                        })
+                        page.anchors.fill = pageContainer
+                        pageContainer.pages.push(page)
+                    }
+                    if (root.aiChatEnabled) addPage(aiChat)
+                    if (root.translatorEnabled) addPage(translator)
+                    if (root.animeEnabled && !root.animeCloset) addPage(anime)
+                    if (pages.length > 0) pages[0].visible = true
+                }
             }
         }
 

@@ -1,11 +1,12 @@
 groups=(illogical-impulse)
 pkgname=illogical-impulse-toolkit
-pkgver=1.0
+pkgver=$(date +%Y%m%d)
 pkgrel=3
 pkgdesc='Illogical Impulse Toolkit Dependencies'
 arch=(any)
 license=(None)
 depends=(
+  dgop
   upower
   wtype
   ydotool

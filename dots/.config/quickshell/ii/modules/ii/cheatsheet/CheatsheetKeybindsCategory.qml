@@ -98,9 +98,16 @@ Column {
     visible: repeater.model.length > 0
     spacing: titleSpacing
 
+    Rectangle {
+        width: parent.width
+        height: 1
+        color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.8)
+    }
     StyledText {
         text: root.isCategorized ? root.categoryName : "Uncategorized"
         font.pixelSize: Appearance.font.pixelSize.title
+        font.bold: true
+        color: Appearance.vzcolors.accentVibrant
     }
 
     function hasDescription(bind) {

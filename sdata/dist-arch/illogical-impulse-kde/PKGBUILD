@@ -1,16 +1,8 @@
 groups=(illogical-impulse)
 pkgname=illogical-impulse-kde
-pkgver=1.0
-pkgrel=3
-pkgdesc='Illogical Impulse KDE Dependencies'
+pkgver=$(date +%Y%m%d)
+pkgrel=9
+pkgdesc='Illogical Impulse KDE individual apps (DEPRECATED - not installed)'
 arch=(any)
 license=(None)
-depends=(
-  bluedevil
-  gnome-keyring
-  networkmanager
-  plasma-nm
-  polkit-kde-agent
-  dolphin
-  systemsettings
-)
+depends=()

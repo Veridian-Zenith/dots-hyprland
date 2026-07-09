@@ -3,11 +3,14 @@ import QtQuick.Layouts
 
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 
 Rectangle {
     id: root
     radius: Appearance.rounding.small
-    color: Appearance.colors.colSurfaceContainerHigh
+    color: Appearance.vzcolors.bgSecondary
+    border.width: 1
+    border.color: Appearance.vzcolors.borderColor
     implicitWidth: columnLayout.implicitWidth + 14 * 2
     implicitHeight: columnLayout.implicitHeight + 14 * 2
     Layout.fillWidth: parent
@@ -26,19 +29,19 @@ Rectangle {
                 id: symbol
                 fill: 0
                 iconSize: Appearance.font.pixelSize.normal
-                color: Appearance.colors.colOnSurfaceVariant
+                color: Appearance.m3colors.m3onBackground
             }
             StyledText {
                 id: title
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                color: Appearance.colors.colOnSurfaceVariant
+                color: Appearance.vzcolors.textColorSecondary
             }
         }
         StyledText {
             id: value
             Layout.alignment: Qt.AlignHCenter
             font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnSurfaceVariant
+            color: Appearance.m3colors.m3onBackground
         }
     }
 }

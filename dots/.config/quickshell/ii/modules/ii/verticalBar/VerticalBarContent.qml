@@ -38,12 +38,25 @@ Item { // Bar content region
         id: barBackground
         anchors {
             fill: parent
-            margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0 // idk why but +1 is needed
+            margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0
         }
-        color: Config.options.bar.showBackground ? Appearance.colors.colLayer0 : "transparent"
+        color: {
+            if (!Config.options.bar.showBackground)
+                return "transparent";
+            if (Config.options.appearance.transparency.liquidGlass)
+                return ColorUtils.applyAlpha(Appearance.colors.colLayer0Base, 0.45);
+            return Appearance.colors.colLayer0;
+        }
         radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
         border.width: Config.options.bar.cornerStyle === 1 ? 1 : 0
         border.color: Appearance.colors.colLayer0Border
+    }
+    // Accent tint overlay for liquid glass
+    Rectangle {
+        anchors.fill: barBackground
+        visible: Config.options.appearance.transparency.liquidGlass && Config.options.bar.showBackground
+        radius: barBackground.radius
+        color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.85)
     }
 
     FocusedScrollMouseArea { // Top section | scroll to change brightness

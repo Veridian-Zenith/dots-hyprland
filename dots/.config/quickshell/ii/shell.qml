@@ -23,7 +23,7 @@ ShellRoot {
     ReloadPopup {}
 
     Component.onCompleted: {
-        MaterialThemeLoader.reapplyTheme()
+        PywalThemeLoader.reapplyTheme()
         Hyprsunset.load()
         FirstRunExperience.load()
         ConflictKiller.load()

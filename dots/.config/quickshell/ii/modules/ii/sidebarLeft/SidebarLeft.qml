@@ -2,7 +2,9 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
+import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
 import Quickshell.Wayland
@@ -133,6 +135,15 @@ Scope { // Scope
                 target: sidebarLeftBackground
                 radius: sidebarLeftBackground.radius
             }
+            RectangularGlow {
+                anchors.fill: sidebarLeftBackground
+                anchors.margins: -2
+                glowRadius: 6
+                spread: 0.06
+                color: Appearance.vzcolors.glowColor
+                cornerRadius: sidebarLeftBackground.radius + 2
+                opacity: 0.15
+            }
             Rectangle {
                 id: sidebarLeftBackground
                 anchors.top: parent.top
@@ -141,10 +152,20 @@ Scope { // Scope
                 anchors.leftMargin: Appearance.sizes.hyprlandGapsOut
                 width: panelWindow.sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
-                color: Appearance.colors.colLayer0
+                color: ColorUtils.transparentize(Appearance.vzcolors.bgPrimary, 0.15)
                 border.width: 1
-                border.color: Appearance.colors.colLayer0Border
-                radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+                border.color: Appearance.vzcolors.borderColor
+                radius: Appearance.rounding.large
+                clip: true
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: sidebarLeftBackground.radius
+                    gradient: Gradient {
+                        GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+                        GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.06) }
+                    }
+                }
 
                 Behavior on width {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
@@ -186,7 +207,10 @@ Scope { // Scope
             Rectangle {
                 id: detachedSidebarBackground
                 anchors.fill: parent
-                color: Appearance.colors.colLayer0
+                color: ColorUtils.transparentize(Appearance.vzcolors.bgPrimary, 0.08)
+                radius: Appearance.rounding.normal
+                border.width: 1
+                border.color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.85)
 
                 Keys.onPressed: (event) => {
                     if (event.modifiers === Qt.ControlModifier) {

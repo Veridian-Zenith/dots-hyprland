@@ -18,6 +18,7 @@ QtObject {
     property list<string> searchQueries: []
     property string functionName
     property var functionCall
+    property string thought_signature
     property string functionResponse
     property bool functionPending: false
     property bool visibleToUser: true

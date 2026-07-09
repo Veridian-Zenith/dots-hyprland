@@ -11,52 +11,81 @@ ApiStrategy {
     
     function buildEndpoint(model: AiModel): string {
         const result = model.endpoint + `?key=\$\{${root.apiKeyEnvVarName}\}`
-        // console.log("[AI] Endpoint: " + result);
         return result;
     }
 
     function buildRequestData(model: AiModel, messages, systemPrompt: string, temperature: real, tools: list<var>, filePath: string) {
         let contents = messages.map(message => {
-            // console.log("[AI] Building request data for message:", JSON.stringify(message, null, 2));
             const geminiApiRoleName = (message.role === "assistant") ? "model" : message.role;
-            const usingSearch = tools[0]?.google_search !== undefined
-            if (!usingSearch && message.functionCall != undefined && message.functionName.length > 0) {
+            const usingSearch = tools[0]?.google_search !== undefined;
+          
+            let parts = [];
+
+            // 1. Handle Function Calls
+            if (!usingSearch && message.functionCall !== undefined && message.functionName && message.functionName.length > 0) {
+                let partObj = {
+                    "functionCall": {
+                        "name": message.functionName,
+                        "args": message.functionCall.args
+                    }
+                };
+                
+                // Ensure thought_signature is present as a sibling to functionCall, not inside it
+                partObj["thought_signature"] = message.thought_signature || "context_engineering_is_the_way_to_go";
+
+                parts.push(partObj);
+
                 return {
                     "role": geminiApiRoleName,
-                    "parts": [{
-                        functionCall: {
-                            "name": message.functionName,
-                        }
-                    }]
-                }
+                    "parts": parts
+                };
             }
-            if (!usingSearch && message.functionResponse != undefined && message.functionName.length > 0) {
+            
+            // 2. Handle Function Responses
+            if (!usingSearch && message.functionResponse !== undefined && message.functionName && message.functionName.length > 0) {
+                parts.push({
+                    "functionResponse": {
+                        "name": message.functionName,
+                        "response": { "content": message.functionResponse }
+                    }
+                });
                 return {
                     "role": geminiApiRoleName,
-                    "parts": [{ 
-                        functionResponse: {
-                            "name": message.functionName,
-                            "response": { "content": message.functionResponse }
-                        }
-                    }]
-                }
+                    "parts": parts
+                };
             }
+
+            // 3. Inject Thought/Reasoning part for standard non-tool turns
+            if (message.thought_signature && message.thought_signature.length > 0) {
+                parts.push({
+                    "text": message.thought_signature,
+                    "thought": true
+                });
+            }
+
+            // 4. Handle Standard Text Content
+            if (message.rawContent && message.rawContent.length > 0) {
+                parts.push({ "text": message.rawContent });
+            }
+            
+            // 5. Handle Associated Inline Media Metadata
+            if (message.fileUri && message.fileUri.length > 0) {
+                parts.push({
+                    "file_data": {
+                        "mime_type": message.fileMimeType,
+                        "file_uri": message.fileUri
+                    }
+                });
+            }
+
             return {
                 "role": geminiApiRoleName,
-                "parts": [
-                    { text: message.rawContent },
-                    ...(message.fileUri && message.fileUri.length > 0 ? [{ 
-                        "file_data": {
-                            "mime_type": message.fileMimeType,
-                            "file_uri": message.fileUri
-                        }
-                    }] : [])
-                ]
-            }
-        })
+                "parts": parts
+            };
+        });
+     
         if (filePath && filePath.length > 0) {
             const trimmedFilePath = CF.FileUtils.trimFileProtocol(filePath);
-            // Add file_data part to the last message's parts array
             contents[contents.length - 1].parts.unshift({
                 file_data: {
                     mime_type: fileMimeTypeSubstitutionString,
@@ -64,6 +93,7 @@ ApiStrategy {
                 }
             });
         }
+
         let baseData = {
             "contents": contents,
             "tools": tools,
@@ -74,12 +104,10 @@ ApiStrategy {
                 "temperature": temperature,
             },
         };
-        // print("Gemini API call payload:", JSON.stringify(baseData, null, 2));
         return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
     }
 
     function buildAuthorizationHeader(apiKeyEnvVarName: string): string {
-        // Gemini doesn't use Authorization header, key is in URL
         return "";
     }
 
@@ -98,20 +126,17 @@ ApiStrategy {
     }
 
     function parseBuffer(message) {
-        // console.log("[Ai] Gemini buffer: ", buffer);
         let finished = false;
         try {
             if (buffer.length === 0) return {};
             const dataJson = JSON.parse(buffer);
 
-            // Uploaded file
             if (dataJson.uploadedFile) {
                 message.fileUri = dataJson.uploadedFile.uri;
                 message.fileMimeType = dataJson.uploadedFile.mimeType;
-                return ({})
+                return ({});
             }
 
-            // Error response handling
             if (dataJson.error) {
                 const errorMsg = `**Error ${dataJson.error.code}**: ${dataJson.error.message}`;
                 message.rawContent += errorMsg;
@@ -119,29 +144,66 @@ ApiStrategy {
                 return { finished: true };
             }
 
-            // No candidates?
             if (!dataJson.candidates) return {};
-            
-            // Finished?
             if (dataJson.candidates[0]?.finishReason) {
                 finished = true;
             }
             
-            // Function call handling
-            if (dataJson.candidates[0]?.content?.parts[0]?.functionCall) {
-                const functionCall = dataJson.candidates[0]?.content?.parts[0]?.functionCall;
-                message.functionName = functionCall.name;
-                message.functionCall = functionCall.name;
-                const newContent = `\n\n[[ Function: ${functionCall.name}(${JSON.stringify(functionCall.args, null, 2)}) ]]\n`
-                message.rawContent += newContent;
-                message.content += newContent;
-                return { functionCall: { name: functionCall.name, args: functionCall.args }, finished: finished };
+            const parts = dataJson.candidates[0]?.content?.parts;
+            if (!parts || parts.length === 0) return { finished: finished };
+
+            let textResponse = "";
+            let functionCallObj = null;
+
+            // Iterate over all parts returned in the response stream chunk
+            for (let i = 0; i < parts.length; i++) {
+                const part = parts[i];
+
+                if (part.thought_signature) {
+                    message.thought_signature = part.thought_signature;
+                }
+
+                // Extract thinking payload if part explicitly flags as thought or text-only reasoning
+                if (part.thought === true || (part.text && part.text.trim() && !part.functionCall)) {
+                    if (part.thought === true) {
+                        message.thought_signature = (message.thought_signature || "") + part.text;
+                        continue; 
+                    }
+                }
+
+                if (part.functionCall) {
+                    functionCallObj = part.functionCall;
+                }
+
+                if (part.text && !part.thought) {
+                    textResponse += part.text;
+                }
             }
 
-            // Normal text response
-            const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
-            message.rawContent += responseContent;
-            message.content += responseContent;
+            // Handle compilation processing for discovered Function Call units
+            if (functionCallObj) {
+                message.functionName = functionCallObj.name;
+                message.functionCall = functionCallObj;
+                
+                const newContent = `\n\n[[ Function: ${functionCallObj.name}(${JSON.stringify(functionCallObj.args, null, 2)}) ]]\n`;
+                message.rawContent += newContent;
+                message.content += newContent;
+
+                return { 
+                    functionCall: { 
+                        name: functionCallObj.name, 
+                        args: functionCallObj.args, 
+                        thought_signature: message.thought_signature 
+                    }, 
+                    finished: finished 
+                };
+            }
+
+            // Handle typical streaming or finalized text compilation segments
+            if (textResponse.length > 0) {
+                message.rawContent += textResponse;
+                message.content += textResponse;
+            }
             
             // Handle annotations and metadata
             const annotationSources = dataJson.candidates[0]?.groundingMetadata?.groundingChunks?.map(chunk => {
@@ -162,11 +224,11 @@ ApiStrategy {
                     "sources": citation.groundingChunkIndices
                 }
             });
+
             message.annotationSources = annotationSources;
             message.annotations = annotations;
             message.searchQueries = dataJson.candidates[0]?.groundingMetadata?.webSearchQueries ?? [];
 
-            // Usage metadata
             if (dataJson.usageMetadata) {
                 return {
                     tokenUsage: {
@@ -198,20 +260,13 @@ ApiStrategy {
 
     function buildScriptFileSetup(filePath) {
         const trimmedFilePath = CF.FileUtils.trimFileProtocol(filePath);
-        let content = ""
-
-        // print("file path:", filePath)
-        // print("trimmed file path:", trimmedFilePath)
-        // print("escaped file path:", CF.StringUtils.shellSingleQuoteEscape(trimmedFilePath))
+        let content = "";
 
         content += `IMAGE_PATH='${CF.StringUtils.shellSingleQuoteEscape(trimmedFilePath)}'\n`;
         content += `${fileMimeTypeVarName}=$(file -b --mime-type "$IMAGE_PATH")\n`;
         content += 'NUM_BYTES=$(wc -c < "${IMAGE_PATH}")\n';
         content += 'tmp_header_file="/tmp/quickshell/ai/upload-header.tmp"\n';
         content += 'tmp_file_info_file="/tmp/quickshell/ai/file-info.json.tmp"\n';
-
-        // Initial resumable request defining metadata.
-        // The upload url is in the response headers dump them to a file.
         content += 'curl "https://generativelanguage.googleapis.com/upload/v1beta/files"'
             + ` -H "x-goog-api-key: \$${apiKeyEnvVarName}"`
             + ' -D $tmp_header_file'
@@ -223,11 +278,9 @@ ApiStrategy {
             + ` -d "{'file': {'display_name': 'Image'}}" 2> /dev/null`
             + '\n';
 
-        // Get file upload header
         content += 'upload_url=$(grep -i "x-goog-upload-url: " "${tmp_header_file}" | cut -d" " -f2 | tr -d "\r")\n';
         content += 'rm "${tmp_header_file}"\n';
 
-        // Upload the actual file
         content += 'curl "${upload_url}"'
             + ` -H "x-goog-api-key: \$${apiKeyEnvVarName}"`
             + ' -H "Content-Length: ${NUM_BYTES}"'
@@ -235,11 +288,10 @@ ApiStrategy {
             + ' -H "X-Goog-Upload-Command: upload, finalize"'
             + ' --data-binary "@${IMAGE_PATH}" 2> /dev/null > "${tmp_file_info_file}"'
             + '\n';
+        content += `${fileUriVarName}=$(jq -r ".file.uri" "$tmp_file_info_file")\n`;
+        content += `printf "{\\"uploadedFile\\": {\\"uri\\": \\"$${fileUriVarName}\\", \\"mimeType\\": \\"$${fileMimeTypeVarName}\\"}}\\n,\\n"\n`;
 
-        content += `${fileUriVarName}=$(jq -r ".file.uri" "$tmp_file_info_file")\n`
-        content += `printf "{\\"uploadedFile\\": {\\"uri\\": \\"$${fileUriVarName}\\", \\"mimeType\\": \\"$${fileMimeTypeVarName}\\"}}\\n,\\n"\n`
-
-        return content
+        return content;
     }
 
     function finalizeScriptContent(scriptContent: string): string {

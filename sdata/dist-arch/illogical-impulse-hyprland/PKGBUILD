@@ -1,12 +1,13 @@
 groups=(illogical-impulse)
 pkgname=illogical-impulse-hyprland
-pkgver=1.0
-pkgrel=5
-pkgdesc='Illogical Impulse Hyprland relatated packages'
+pkgver=$(date +%Y%m%d)
+pkgrel=1
+pkgdesc='Illogical Impulse Hyprland related packages'
 arch=(any)
 license=(None)
 depends=(
-  hyprland
-  hyprsunset
+  bluez
+  hyprland-git
+  hyprsunset-git
   wl-clipboard
 )

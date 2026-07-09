@@ -1,15 +1,12 @@
 groups=(illogical-impulse)
 pkgname=illogical-impulse-fonts-themes
-pkgver=1.0
-pkgrel=6
+pkgver=$(date +%Y%m%d)
+pkgrel=7
 pkgdesc='Illogical Impulse Fonts and Theming Dependencies'
 arch=(any)
 license=(None)
 depends=(
   adw-gtk-theme-git
-  breeze
-  breeze-plus
-  darkly-bin
   eza
   fish
   fontconfig

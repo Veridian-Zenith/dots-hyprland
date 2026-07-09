@@ -1,5 +1,6 @@
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 
@@ -14,10 +15,10 @@ GroupButton {
 
     buttonRadius: baseHeight / 2
     buttonRadiusPressed: Appearance.rounding.small
-    colBackground: Appearance.colors.colLayer2
-    colBackgroundHover: Appearance.colors.colLayer2Hover
-    colBackgroundActive: Appearance.colors.colLayer2Active
-    property color colText: toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
+    colBackground: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.92)
+    colBackgroundHover: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.85)
+    colBackgroundActive: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.75)
+    property color colText: toggled ? Appearance.vzcolors.accentVibrant : Appearance.m3colors.m3onBackground
 
     contentItem: Item {
         id: content

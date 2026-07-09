@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import qs.services
 import qs.modules.ii.sidebarRight.calendar
 import qs.modules.ii.sidebarRight.todo
@@ -11,8 +12,20 @@ import QtQuick.Layouts
 Rectangle {
     id: root
     radius: Appearance.rounding.normal
-    color: Appearance.colors.colLayer1
+    color: ColorUtils.transparentize(Appearance.vzcolors.bgSecondary, 0.08)
+    border.width: 1
+    border.color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.88)
     clip: true
+
+    Rectangle {
+        anchors.fill: parent
+        radius: parent.radius
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+            GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.05) }
+        }
+    }
+
     implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : 350
     property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property int previousIndex: -1
@@ -106,7 +119,7 @@ Rectangle {
                 text: "keyboard_arrow_up"
                 iconSize: Appearance.font.pixelSize.larger
                 horizontalAlignment: Text.AlignHCenter
-                color: Appearance.colors.colOnLayer1
+                color: Appearance.m3colors.m3onBackground
             }
         }
 
@@ -117,7 +130,7 @@ Rectangle {
             // text: `${DateTime.collapsedCalendarFormat}   •   ${remainingTasks} task${remainingTasks > 1 ? "s" : ""}`
             text: Translation.tr("%1   •   %2 tasks").arg(DateTime.collapsedCalendarFormat).arg(remainingTasks)
             font.pixelSize: Appearance.font.pixelSize.large
-            color: Appearance.colors.colOnLayer1
+            color: Appearance.m3colors.m3onBackground
         }
     }
 
@@ -183,7 +196,7 @@ Rectangle {
                     text: "keyboard_arrow_down"
                     iconSize: Appearance.font.pixelSize.larger
                     horizontalAlignment: Text.AlignHCenter
-                    color: Appearance.colors.colOnLayer1
+                    color: Appearance.m3colors.m3onBackground
                 }
             }
         }

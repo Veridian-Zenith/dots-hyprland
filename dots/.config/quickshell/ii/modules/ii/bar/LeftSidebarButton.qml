@@ -3,6 +3,7 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 
 RippleButton {
     id: root
@@ -18,11 +19,11 @@ RippleButton {
     implicitWidth: distroIcon.width + buttonPadding * 2
     implicitHeight: distroIcon.height + buttonPadding * 2
     buttonRadius: Appearance.rounding.full
-    colBackgroundHover: Appearance.colors.colLayer1Hover
-    colRipple: Appearance.colors.colLayer1Active
-    colBackgroundToggled: Appearance.colors.colSecondaryContainer
-    colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-    colRippleToggled: Appearance.colors.colSecondaryContainerActive
+    colBackgroundHover: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.85)
+    colRipple: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.7)
+    colBackgroundToggled: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.75)
+    colBackgroundToggledHover: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.5)
+    colRippleToggled: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.5)
     toggled: GlobalStates.sidebarLeftOpen
 
     onPressed: {
@@ -59,7 +60,7 @@ RippleButton {
         height: 19.5
         source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : `${Config.options.bar.topLeftIcon}-symbolic`
         colorize: true
-        color: Appearance.colors.colOnLayer0
+        color: root.toggled ? Appearance.vzcolors.accentVibrant : Appearance.m3colors.m3onBackground
 
         Rectangle {
             opacity: root.showPing ? 1 : 0

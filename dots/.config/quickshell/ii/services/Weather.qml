@@ -6,22 +6,14 @@ import Quickshell.Io
 import QtQuick
 import QtPositioning
 
-import qs.modules.common
+import "root:/modules/common"
 
 Singleton {
     id: root
-    // 10 minute
-    readonly property int fetchInterval: Config.options.bar.weather.fetchInterval * 60 * 1000
-    readonly property string city: Config.options.bar.weather.city
-    readonly property bool useUSCS: Config.options.bar.weather.useUSCS
-    property bool gpsActive: Config.options.bar.weather.enableGPS
 
-    onUseUSCSChanged: {
-        root.getData();
-    }
-    onCityChanged: {
-        root.getData();
-    }
+    readonly property int fetchInterval: Config.options.bar.weather.fetchInterval * 60 * 1000
+    readonly property bool useUSCS: false
+    property bool gpsActive: false
 
     property var location: ({
         valid: false,
@@ -36,14 +28,14 @@ Singleton {
         sunset: 0,
         windDir: 0,
         wCode: 0,
-        city: 0,
+        city: "Loading...",
         wind: 0,
         precip: 0,
         visib: 0,
         press: 0,
         temp: 0,
         tempFeelsLike: 0,
-        lastRefresh: 0,
+        lastRefresh: 0
     })
 
     function refineData(data) {
@@ -54,28 +46,18 @@ Singleton {
         temp.sunset = data?.astronomy?.sunset || "0.0";
         temp.windDir = data?.current?.winddir16Point || "N";
         temp.wCode = data?.current?.weatherCode || "113";
-        temp.city = data?.location?.areaName[0]?.value || "City";
-        temp.temp = "";
-        temp.tempFeelsLike = "";
-        if (root.useUSCS) {
-            temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
-            temp.precip = (data?.current?.precipInches || 0) + " in";
-            temp.visib = (data?.current?.visibilityMiles || 0) + " m";
-            temp.press = (data?.current?.pressureInches || 0) + " psi";
-            temp.temp += (data?.current?.temp_F || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeF || 0);
-            temp.temp += "°F";
-            temp.tempFeelsLike += "°F";
-        } else {
-            temp.wind = (data?.current?.windspeedKmph || 0) + " km/h";
-            temp.precip = (data?.current?.precipMM || 0) + " mm";
-            temp.visib = (data?.current?.visibility || 0) + " km";
-            temp.press = (data?.current?.pressure || 0) + " hPa";
-            temp.temp += (data?.current?.temp_C || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeC || 0);
-            temp.temp += "°C";
-            temp.tempFeelsLike += "°C";
-        }
+
+        // Dynamically assigned from the JSON response
+        temp.city = data?.location?.areaName[0]?.value || "Unknown City";
+
+        // Metric formatting
+        temp.wind = (data?.current?.windspeedKmph || 0) + " km/h";
+        temp.precip = (data?.current?.precipMM || 0) + " mm";
+        temp.visib = (data?.current?.visibility || 0) + " km";
+        temp.press = (data?.current?.pressure || 0) + " hPa";
+        temp.temp = (data?.current?.temp_C || 0) + "°C";
+        temp.tempFeelsLike = (data?.current?.FeelsLikeC || 0) + "°C";
+
         temp.lastRefresh = DateTime.time + " • " + DateTime.date;
         root.data = temp;
     }
@@ -86,20 +68,13 @@ Singleton {
         if (root.gpsActive && root.location.valid) {
             command += `/${root.location.lat},${root.location.long}`;
         } else {
-            command += `/${formatCityName(root.city)}`;
+            // Hardcoded coordinates target
+            command += "/35.759200,-90.323100";
         }
 
-        // format as json
-        command += "?format=j1";
-        command += " | ";
-        // only take the current weather, location, asytronmy data
-        command += "jq '{current: .current_condition[0], location: .nearest_area[0], astronomy: .weather[0].astronomy[0]}'";
+        command += "?format=j1 | jq '{current: .current_condition[0], location: .nearest_area[0], astronomy: .weather[0].astronomy[0]}'";
         fetcher.command[2] = command;
         fetcher.running = true;
-    }
-
-    function formatCityName(cityName) {
-        return cityName.trim().split(/\s+/).join('+');
     }
 
     Component.onCompleted: {
@@ -113,12 +88,10 @@ Singleton {
         command: ["bash", "-c", ""]
         stdout: StdioCollector {
             onStreamFinished: {
-                if (text.length === 0)
-                    return;
+                if (text.length === 0) return;
                 try {
                     const parsedData = JSON.parse(text);
                     root.refineData(parsedData);
-                    // console.info(`[ data: ${JSON.stringify(parsedData)}`);
                 } catch (e) {
                     console.error(`[WeatherService] ${e.message}`);
                 }
@@ -131,15 +104,11 @@ Singleton {
         updateInterval: root.fetchInterval
 
         onPositionChanged: {
-            // update the location if the given location is valid
-            // if it fails getting the location, use the last valid location
             if (position.latitudeValid && position.longitudeValid) {
                 root.location.lat = position.coordinate.latitude;
                 root.location.long = position.coordinate.longitude;
                 root.location.valid = true;
-                // console.info(`📍 Location: ${position.coordinate.latitude}, ${position.coordinate.longitude}`);
                 root.getData();
-                // if can't get initialized with valid location deactivate the GPS
             } else {
                 root.gpsActive = root.location.valid ? true : false;
                 console.error("[WeatherService] Failed to get the GPS location.");
@@ -151,7 +120,7 @@ Singleton {
                 positionSource.stop();
                 root.location.valid = false;
                 root.gpsActive = false;
-                Quickshell.execDetached(["notify-send", Translation.tr("Weather Service"), Translation.tr("Cannot find a GPS service. Using the fallback method instead."), "-a", "Shell"]);
+                Quickshell.execDetached(["bash", "-c", `notify-send WeatherService 'Can not find a GPS service. Using the fallback method instead.'`]);
                 console.error("[WeatherService] Could not aquire a valid backend plugin.");
             }
         }

@@ -1,8 +1,10 @@
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import qs.services
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
@@ -17,22 +19,30 @@ Item {
         spacing: 4
 
         StyledText {
+            id: timeText
             font.pixelSize: Appearance.font.pixelSize.large
-            color: Appearance.colors.colOnLayer1
+            color: Appearance.vzcolors.accentVibrant
             text: DateTime.time
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 4
+                samples: 9
+                color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.7)
+            }
         }
 
         StyledText {
             visible: root.showDate
             font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnLayer1
+            color: Appearance.vzcolors.textColorSecondary
             text: "•"
         }
 
         StyledText {
             visible: root.showDate
             font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnLayer1
+            color: Appearance.vzcolors.textColorSecondary
             text: DateTime.longDate
         }
     }

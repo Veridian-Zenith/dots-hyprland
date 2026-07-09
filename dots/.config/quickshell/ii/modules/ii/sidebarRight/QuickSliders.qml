@@ -2,6 +2,7 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -18,9 +19,20 @@ Rectangle {
     implicitWidth: contentItem.implicitWidth + root.horizontalPadding * 2
     implicitHeight: contentItem.implicitHeight + root.verticalPadding * 2
     radius: Appearance.rounding.normal
-    color: Appearance.colors.colLayer1
+    color: ColorUtils.transparentize(Appearance.vzcolors.bgSecondary, 0.08)
+    border.width: 1
+    border.color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.88)
     property real verticalPadding: 4
     property real horizontalPadding: 12
+
+    Rectangle {
+        anchors.fill: parent
+        radius: parent.radius
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+            GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.05) }
+        }
+    }
 
     Column {
         id: contentItem
@@ -113,7 +125,7 @@ Rectangle {
                 rightMargin: nearFull ? 14 : 8
             }
             iconSize: 20
-            color: nearFull ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+            color: nearFull ? Appearance.vzcolors.accentVibrant : ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.65)
             text: quickSlider.materialSymbol
 
             Behavior on color {
@@ -135,7 +147,7 @@ Rectangle {
                 rightMargin: nearIcon ? 14 : (1 - iconLocation) * quickSlider.effectiveDraggingWidth + quickSlider.rightPadding + 8
             }
             iconSize: 20
-            color: quickSlider.value >= iconLocation - 0.1 ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+            color: quickSlider.value >= iconLocation - 0.1 ? Appearance.vzcolors.accentVibrant : ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.65)
             text: secondaryMaterialSymbol
 
             Behavior on color {

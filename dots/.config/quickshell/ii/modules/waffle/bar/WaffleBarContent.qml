@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import qs.modules.waffle.looks
 import qs.modules.waffle.bar.tasks
 import qs.modules.waffle.bar.tray
@@ -9,7 +10,7 @@ import qs.modules.waffle.bar.tray
 Rectangle {
     id: root
 
-    color: Looks.colors.bg0
+    color: Looks.colors.bg0Base
     implicitHeight: 48
     
     Rectangle {
@@ -20,7 +21,7 @@ Rectangle {
             top: Config.options.waffles.bar.bottom ? parent.top : undefined
             bottom: Config.options.waffles.bar.bottom ? undefined : parent.bottom
         }
-        color: Looks.colors.bg0Border
+        color: ColorUtils.transparentize(Appearance.m3colors.m3primary, 0.8)
         implicitHeight: 1
     }
 

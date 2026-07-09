@@ -108,19 +108,21 @@ Singleton {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
                 property JsonObject fonts: JsonObject {
-                    property string main: "Google Sans Flex"
+                    property string main: "Mikhak"
                     property string numbers: "Google Sans Flex"
-                    property string title: "Google Sans Flex"
+                    property string title: "Mikhak"
                     property string iconNerd: "JetBrains Mono NF"
-                    property string monospace: "JetBrains Mono NF"
+                    property string iconMaterial: "Material Symbols Rounded"
+                    property string monospace: "FiraCode Nerd Font"
                     property string reading: "Readex Pro"
-                    property string expressive: "Space Grotesk"
+                    property string expressive: "Mikhak"
                 }
                 property JsonObject transparency: JsonObject {
                     property bool enable: false
                     property bool automatic: true
                     property real backgroundTransparency: 0.11
                     property real contentTransparency: 0.57
+                    property bool liquidGlass: false
                 }
                 property JsonObject wallpaperTheming: JsonObject {
                     property bool enableAppsAndShell: true
@@ -134,7 +136,7 @@ Singleton {
                     }
                 }
                 property JsonObject palette: JsonObject {
-                    property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
+                    property string type: "scheme-expressive" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
                     property string accentColor: ""
                 }
             }
@@ -150,14 +152,14 @@ Singleton {
             }
 
             property JsonObject apps: JsonObject {
-                property string bluetooth: "kcmshell6 kcm_bluetooth"
-                property string changePassword: "kitty -1 --hold=yes fish -i -c 'passwd'"
-                property string network: "kcmshell6 kcm_networkmanagement"
-                property string manageUser: "kcmshell6 kcm_users"
-                property string networkEthernet: "kcmshell6 kcm_networkmanagement"
-                property string taskManager: "plasma-systemmonitor --page-name Processes"
-                property string terminal: "kitty -1" // This is only for shell actions
-                property string update: "kitty -1 --hold=yes fish -i -c 'pkexec pacman -Syu'"
+                property string bluetooth: "blueman"
+                property string changePassword: "ghostty --hold=yes fish -i -c 'passwd'"
+                property string network: "iwctl"
+                property string manageUser: "ghostty --hold=yes fish -i -c 'sudo nispasswd'"
+                property string networkEthernet: "iwctl"
+                property string taskManager: "dgop"
+                property string terminal: "ghostty" // This is only for shell actions
+                property string update: "ghostty --hold=yes fish -i -c 'pkexec pacman -Syu'"
                 property string volumeMixer: `~/.config/hypr/hyprland/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
             }
 
@@ -293,7 +295,7 @@ Singleton {
             }
 
             property JsonObject calendar: JsonObject {
-                property string locale: "en-GB"
+                property string locale: "de_DE.UTF-8"
             }
 
             property JsonObject cheatsheet: JsonObject {
@@ -330,7 +332,7 @@ Singleton {
                 property bool pinnedOnStartup: false
                 property bool hoverToReveal: true // When false, only reveals on empty workspace
                 property list<string> pinnedApps: [ // IDs of pinned entries
-                    "org.kde.dolphin", "kitty",]
+                    "org.kde.dolphin", "com.mitchellh.ghostty",]
                 property list<string> ignoredAppRegexes: []
             }
 
@@ -356,7 +358,7 @@ Singleton {
             }
 
             property JsonObject launcher: JsonObject {
-                property list<string> pinnedApps: [ "org.kde.dolphin", "kitty", "cmake-gui"]
+                property list<string> pinnedApps: [ "org.kde.dolphin", "com.mitchellh.ghostty", "cmake-gui"]
             }
 
             property JsonObject light: JsonObject {
@@ -399,7 +401,7 @@ Singleton {
 
             property JsonObject notifications: JsonObject {
                 property int timeout: 7000
-                property JsonObject monitor: JsonObject {
+                property JsonObject forceMonitor: JsonObject {
                     property bool enable: false
                     property string name: "" // Name of the monitor to show notifications on, like "eDP-1". Find out with 'hyprctl monitors' command
                 }
@@ -622,7 +624,7 @@ Singleton {
                     property bool leftAlignApps: false
                 }
                 property JsonObject actionCenter: JsonObject {
-                    property list<string> toggles: [ "network", "bluetooth", "easyEffects", "powerProfile", "idleInhibitor", "nightLight", "darkMode", "antiFlashbang", "cloudflareWarp", "mic", "musicRecognition", "notifications", "onScreenKeyboard", "gameMode", "screenSnip", "colorPicker" ]
+                    property list<string> toggles: [ "network", "bluetooth", "easyEffects", "powerProfile", "idleInhibitor", "antiFlashbang", "cloudflareWarp", "mic", "musicRecognition", "notifications", "onScreenKeyboard", "gameMode", "colorPicker" ]
                 }
                 property JsonObject calendar: JsonObject {
                     property bool force2CharDayOfWeek: true

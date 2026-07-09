@@ -223,6 +223,58 @@ ContentPage {
             onCheckedChanged: {
                 Config.options.appearance.transparency.enable = checked;
             }
+            StyledToolTip {
+                text: Translation.tr("Makes panels and popups slightly translucent")
+            }
+        }
+        ConfigRow {
+            enabled: Config.options.appearance.transparency.enable
+            ConfigSwitch {
+                text: Translation.tr("Auto")
+                checked: Config.options.appearance.transparency.automatic
+                onCheckedChanged: {
+                    Config.options.appearance.transparency.automatic = checked;
+                }
+            }
+            ConfigSpinBox {
+                enabled: !Config.options.appearance.transparency.automatic
+                icon: "opacity"
+                text: Translation.tr("Background %")
+                value: Config.options.appearance.transparency.backgroundTransparency * 100
+                from: 0
+                to: 50
+                stepSize: 1
+                onValueChanged: {
+                    Config.options.appearance.transparency.backgroundTransparency = value / 100;
+                }
+            }
+        }
+        ConfigRow {
+            enabled: Config.options.appearance.transparency.enable && !Config.options.appearance.transparency.automatic
+            ConfigSpinBox {
+                icon: "blur_on"
+                text: Translation.tr("Content %")
+                value: Config.options.appearance.transparency.contentTransparency * 100
+                from: 0
+                to: 100
+                stepSize: 5
+                onValueChanged: {
+                    Config.options.appearance.transparency.contentTransparency = value / 100;
+                }
+            }
+        }
+
+        ConfigSwitch {
+            enabled: Config.options.appearance.transparency.enable
+            buttonIcon: "blur_on"
+            text: Translation.tr("Liquid Glass")
+            checked: Config.options.appearance.transparency.liquidGlass
+            onCheckedChanged: {
+                Config.options.appearance.transparency.liquidGlass = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Frosted glass panels with wallpaper blur")
+            }
         }
     }
 

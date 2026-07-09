@@ -1,6 +1,6 @@
 groups=(illogical-impulse)
 pkgname=illogical-impulse-screencapture
-pkgver=1.0
+pkgver=$(date +%Y%m%d)
 pkgrel=2
 pkgdesc='Illogical Impulse Screenshot and Recording Dependencies'
 arch=(any)

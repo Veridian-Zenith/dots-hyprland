@@ -1,6 +1,6 @@
 groups=(illogical-impulse)
 pkgname=illogical-impulse-audio
-pkgver=1.0
+pkgver=$(date +%Y%m%d)
 pkgrel=3
 pkgdesc='Illogical Impulse Audio Dependencies'
 arch=(any)

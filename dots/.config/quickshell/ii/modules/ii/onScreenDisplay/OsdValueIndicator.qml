@@ -1,7 +1,9 @@
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell.Widgets
 
 Item {
@@ -30,8 +32,20 @@ Item {
             fill: parent
             margins: Appearance.sizes.elevationMargin
         }
-        radius: Appearance.rounding.full
-        color: Appearance.colors.colLayer0
+        radius: Appearance.rounding.normal
+        color: ColorUtils.transparentize(Appearance.vzcolors.bgPrimary, 0.15)
+        border.width: 1
+        border.color: Appearance.vzcolors.borderColor
+        clip: true
+
+        Rectangle {
+            anchors.fill: parent
+            radius: parent.radius
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.06) }
+            }
+        }
 
         implicitWidth: valueRow.implicitWidth
         implicitHeight: valueRow.implicitHeight
@@ -55,7 +69,7 @@ Item {
                         centerIn: parent
                         alignWhenCentered: !root.rotateIcon
                     }
-                    color: Appearance.colors.colOnLayer0
+                    color: Appearance.m3colors.m3onBackground
                     renderType: Text.QtRendering
 
                     text: root.icon
@@ -81,14 +95,14 @@ Item {
                     Layout.rightMargin: valueProgressBar.height / 2 // Align text with progressbar radius curve's left end
 
                     StyledText {
-                        color: Appearance.colors.colOnLayer0
+                        color: Appearance.m3colors.m3onBackground
                         font.pixelSize: Appearance.font.pixelSize.small
                         Layout.fillWidth: true
                         text: root.name
                     }
 
                     StyledText {
-                        color: Appearance.colors.colOnLayer0
+                        color: Appearance.m3colors.m3onBackground
                         font.pixelSize: Appearance.font.pixelSize.small
                         Layout.fillWidth: false
                         text: Math.round(root.value * 100)

@@ -6,6 +6,7 @@ import Quickshell
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.waffle.looks
 
 Item {
@@ -43,7 +44,9 @@ Item {
         anchors.centerIn: parent
         z: 0
         
-        color: Looks.colors.bgPanelFooterBackground
+        color: Config.options.appearance.transparency.liquidGlass
+            ? ColorUtils.mix(ColorUtils.applyAlpha(Appearance.colors.colSurfaceContainerLow, 0.45), Appearance.vzcolors.accentVibrant, 0.9)
+            : Looks.colors.bgPanelFooterBackground
         implicitWidth: contentItem.implicitWidth
         implicitHeight: contentItem.implicitHeight
         layer.enabled: true

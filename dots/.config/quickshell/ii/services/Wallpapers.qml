@@ -41,6 +41,7 @@ Singleton {
 
     function apply(path, darkMode = Appearance.m3colors.darkmode) {
         if (!path || path.length === 0) return;
+        Config.options.background.wallpaperPath = path;
         Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--mode", darkMode ? "dark" : "light", "--image", path]);
         root.changed()
     }

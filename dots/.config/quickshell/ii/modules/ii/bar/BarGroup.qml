@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 
@@ -12,6 +13,7 @@ Item {
 
     Rectangle {
         id: background
+        radius: Math.min(width, height) / 2
         anchors {
             fill: parent
             topMargin: root.vertical ? 0 : 4
@@ -19,8 +21,21 @@ Item {
             leftMargin: root.vertical ? 4 : 0
             rightMargin: root.vertical ? 4 : 0
         }
-        color: Config.options?.bar.borderless ? "transparent" : Appearance.colors.colLayer1
-        radius: Appearance.rounding.small
+        color: Config.options.appearance.transparency.liquidGlass ? "transparent" : Appearance.vzcolors.bgSecondary
+        border.width: Config.options.appearance.transparency.liquidGlass ? 0 : 1
+        border.color: Appearance.vzcolors.borderColor
+        clip: true
+
+        Rectangle {
+            anchors.fill: parent
+            radius: parent.radius
+            visible: !Config.options.appearance.transparency.liquidGlass
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+                GradientStop { position: 0.5; color: "transparent" }
+                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.06) }
+            }
+        }
     }
 
     GridLayout {

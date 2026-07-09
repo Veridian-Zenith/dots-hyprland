@@ -133,7 +133,7 @@ Item {
                 topRightRadius: root.vertical ? radiusPrev : radiusNext
                 bottomRightRadius: radiusNext
                 
-                color: ColorUtils.transparentize(Appearance.m3colors.m3secondaryContainer, 0.4)
+                color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.88)
                 opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && root.effectiveActiveWorkspaceId === index+1)) ? 1 : 0
 
                 Behavior on opacity {
@@ -158,7 +158,7 @@ Item {
         z: 2
         // Make active ws indicator, which has a brighter color, smaller to look like it is of the same size as ws occupied highlight
         radius: Appearance.rounding.full
-        color: Appearance.colors.colPrimary
+        color: Appearance.vzcolors.accentVibrant
 
         anchors {
             verticalCenter: vertical ? undefined : parent.verticalCenter
@@ -227,9 +227,9 @@ Item {
                         text: Config.options?.bar.workspaces.numberMap[button.workspaceValue - 1] || button.workspaceValue
                         elide: Text.ElideRight
                         color: (root.effectiveActiveWorkspaceId == button.workspaceValue) ? 
-                            Appearance.m3colors.m3onPrimary : 
-                            (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
-                                Appearance.colors.colOnLayer1Inactive)
+                            Appearance.vzcolors.accentVibrant : 
+                            (workspaceOccupied[index] ? Appearance.m3colors.m3onBackground : 
+                                ColorUtils.transparentize(Appearance.m3colors.m3onBackground, 0.5))
 
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -247,9 +247,9 @@ Item {
                         height: width
                         radius: width / 2
                         color: (root.effectiveActiveWorkspaceId == button.workspaceValue) ? 
-                            Appearance.m3colors.m3onPrimary : 
-                            (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
-                                Appearance.colors.colOnLayer1Inactive)
+                            Appearance.vzcolors.accentVibrant : 
+                            (workspaceOccupied[index] ? Appearance.m3colors.m3onBackground : 
+                                ColorUtils.transparentize(Appearance.m3colors.m3onBackground, 0.5))
 
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

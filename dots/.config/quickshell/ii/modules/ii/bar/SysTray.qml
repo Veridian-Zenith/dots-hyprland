@@ -1,11 +1,13 @@
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Services.SystemTray
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 
 Item {
     id: root
@@ -85,16 +87,16 @@ Item {
             background.implicitWidth: 24
             background.implicitHeight: 24
             background.anchors.centerIn: this
-            colBackgroundToggled: Appearance.colors.colSecondaryContainer
-            colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-            colRippleToggled: Appearance.colors.colSecondaryContainerActive
+            colBackgroundToggled: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.85)
+            colBackgroundToggledHover: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.75)
+            colRippleToggled: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.65)
 
             contentItem: MaterialSymbol {
                 anchors.centerIn: parent
                 iconSize: Appearance.font.pixelSize.larger
                 text: "expand_more"
                 horizontalAlignment: Text.AlignHCenter
-                color: root.trayOverflowOpen ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer2
+                color: root.trayOverflowOpen ? Appearance.vzcolors.accentVibrant : Appearance.m3colors.m3onBackground
                 rotation: (root.trayOverflowOpen ? 180 : 0) - (90 * root.vertical) + (180 * root.invertSide)
                 Behavior on rotation {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -149,7 +151,7 @@ Item {
         StyledText {
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             font.pixelSize: Appearance.font.pixelSize.larger
-            color: Appearance.colors.colSubtext
+            color: Appearance.vzcolors.textColorSecondary
             text: "•"
             visible: root.showSeparator && SystemTray.items.values.length > 0
         }

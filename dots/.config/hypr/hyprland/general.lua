@@ -54,8 +54,8 @@ hl.config({
         border_size = 1,
 
         col = {
-            active_border = "rgba(0DB7D455)",
-            inactive_border = "rgba(31313600)"
+            active_border = "rgba(FFFFFFFF)",
+            inactive_border = "rgba(31313600)",
         },
         resize_on_border = true,
 
@@ -156,41 +156,41 @@ hl.curve("stall", {
 hl.animation({
     leaf = "windowsIn",
     enabled = true,
-    speed = 3,
+    speed = 5,
     bezier = "emphasizedDecel",
-    style = "popin 80%"
+    style = "popin 75%"
 })
 hl.animation({
     leaf = "fadeIn",
     enabled = true,
-    speed = 3,
+    speed = 4,
     bezier = "emphasizedDecel"
 })
 hl.animation({
     leaf = "windowsOut",
     enabled = true,
-    speed = 2,
-    bezier = "emphasizedDecel",
-    style = "popin 90%"
+    speed = 3,
+    bezier = "emphasizedAccel",
+    style = "popin 85%"
 })
 hl.animation({
     leaf = "fadeOut",
     enabled = true,
-    speed = 2,
-    bezier = "emphasizedDecel"
+    speed = 3,
+    bezier = "emphasizedAccel"
 })
 hl.animation({
     leaf = "windowsMove",
     enabled = true,
-    speed = 3,
+    speed = 5,
     bezier = "emphasizedDecel",
     style = "slide"
 })
 hl.animation({
     leaf = "border",
     enabled = true,
-    speed = 10,
-    bezier = "emphasizedDecel"
+    speed = 100,
+    bezier = "linear"
 })
 
 -- layers
@@ -225,7 +225,7 @@ hl.animation({
 hl.animation({
     leaf = "workspaces",
     enabled = true,
-    speed = 7,
+    speed = 8,
     bezier = "menu_decel",
     style = "slide"
 })
@@ -264,7 +264,7 @@ hl.config({
 
         touchpad = {
             natural_scroll = true,
-            disable_while_typing = true,
+            disable_while_typing = false,
             clickfinger_behavior = true,
             scroll_factor = 0.7
         }
@@ -273,6 +273,7 @@ hl.config({
     misc = {
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
+        background_color = "rgba(1a1110ff)",
         vrr = 0,
         mouse_move_enables_dpms = true,
         key_press_enables_dpms = true,

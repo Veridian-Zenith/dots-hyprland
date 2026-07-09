@@ -282,14 +282,15 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         spacing: root.padding
 
         Item {
+            id: messagesItem
             // Messages
             Layout.fillWidth: true
             Layout.fillHeight: true
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
-                    width: swipeView.width
-                    height: swipeView.height
+                    width: messagesItem.width
+                    height: messagesItem.height
                     radius: Appearance.rounding.small
                 }
             }
@@ -749,8 +750,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 ApiInputBoxIndicator {
                     // Model indicator
                     icon: "api"
-                    text: Ai.getModel().name
-                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel().name).arg(root.commandPrefix)
+                    text: Ai.getModel()?.name ?? "Unknown"
+                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel()?.name ?? "Unknown").arg(root.commandPrefix)
                 }
 
                 ApiInputBoxIndicator {

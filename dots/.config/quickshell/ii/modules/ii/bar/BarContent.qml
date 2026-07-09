@@ -1,6 +1,7 @@
 import qs.modules.ii.bar.weather
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Services.UPower
 import qs
@@ -22,7 +23,7 @@ Item { // Bar content region
         Layout.bottomMargin: Appearance.sizes.baseBarHeight / 3
         Layout.fillHeight: true
         implicitWidth: 1
-        color: Appearance.colors.colOutlineVariant
+        color: Appearance.vzcolors.borderColor
     }
 
     // Background shadow
@@ -34,6 +35,30 @@ Item { // Bar content region
             target: barBackground
         }
     }
+    // Subtle accent glow
+    RectangularGlow {
+        id: barGlow
+        visible: Config.options.bar.showBackground && Config.options.bar.cornerStyle === 1
+        anchors.fill: barBackground
+        anchors.margins: -2
+        glowRadius: 6
+        spread: 0.08
+        color: Appearance.vzcolors.glowColor
+        cornerRadius: barBackground.radius + 2
+        opacity: 0.2
+    }
+    // Border glow ring
+    Rectangle {
+        id: barGlowBorder
+        visible: Config.options.bar.showBackground && Config.options.bar.cornerStyle === 1
+        anchors.fill: barBackground
+        anchors.margins: -1
+        color: "transparent"
+        radius: barBackground.radius + 1
+        border.width: 2
+        border.color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.6)
+        opacity: 0.5
+    }
     // Background
     Rectangle {
         id: barBackground
@@ -41,10 +66,22 @@ Item { // Bar content region
             fill: parent
             margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0 // idk why but +1 is needed
         }
-        color: Config.options.bar.showBackground ? Appearance.colors.colLayer0 : "transparent"
+        color: Config.options.bar.showBackground ? ColorUtils.transparentize(Appearance.vzcolors.bgPrimary, 0.15) : "transparent"
         radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
         border.width: Config.options.bar.cornerStyle === 1 ? 1 : 0
-        border.color: Appearance.colors.colLayer0Border
+        border.color: Appearance.vzcolors.borderColor
+        clip: true
+
+        Rectangle {
+            anchors.fill: parent
+            radius: parent.radius
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.04) }
+                GradientStop { position: 0.5; color: "transparent" }
+                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.08) }
+            }
+            visible: Config.options.bar.showBackground
+        }
     }
 
     FocusedScrollMouseArea { // Left side | scroll to change brightness
@@ -86,15 +123,21 @@ Item { // Bar content region
                 id: leftSidebarButton
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: Appearance.rounding.screenRounding
-                colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+                colBackground: barLeftSideMouseArea.hovered ? ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.88) : ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 1)
             }
 
             ActiveWindow {
                 Layout.leftMargin: 10 + (leftSidebarButton.visible ? 0 : Appearance.rounding.screenRounding)
-                Layout.rightMargin: Appearance.rounding.screenRounding
+                Layout.rightMargin: 4
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 visible: root.useShortenedForm === 0
+            }
+
+            GitIndicator {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.rightMargin: 6
+                visible: DevProjects.activeGitBranch.length > 0 && root.useShortenedForm === 0
             }
         }
     }
@@ -235,14 +278,14 @@ Item { // Bar content region
                 implicitHeight: indicatorsRowLayout.implicitHeight + 5 * 2
 
                 buttonRadius: Appearance.rounding.full
-                colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-                colBackgroundHover: Appearance.colors.colLayer1Hover
-                colRipple: Appearance.colors.colLayer1Active
-                colBackgroundToggled: Appearance.colors.colSecondaryContainer
-                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-                colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                colBackground: barRightSideMouseArea.hovered ? ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.85) : ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 1)
+                colBackgroundHover: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.85)
+                colRipple: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.7)
+                colBackgroundToggled: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.75)
+                colBackgroundToggledHover: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.5)
+                colRippleToggled: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.5)
                 toggled: GlobalStates.sidebarRightOpen
-                property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
+                property color colText: toggled ? Appearance.vzcolors.accentVibrant : Appearance.m3colors.m3onBackground
 
                 Behavior on colText {
                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

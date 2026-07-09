@@ -1,7 +1,7 @@
 groups=(illogical-impulse)
 pkgname=illogical-impulse-microtex-git
 _pkgname=MicroTeX
-pkgver=r494.0e3707f
+pkgver=$(date +%Y%m%d)
 pkgrel=4
 pkgdesc='MicroTeX for illogical-impulse dotfiles.'
 #pkgdesc="A dynamic, cross-platform, and embeddable LaTeX rendering library"

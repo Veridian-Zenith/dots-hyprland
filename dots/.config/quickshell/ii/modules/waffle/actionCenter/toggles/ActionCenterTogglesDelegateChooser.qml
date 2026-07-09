@@ -55,13 +55,6 @@ DelegateChooser {
         }
     }
     DelegateChoice {
-        roleValue: "darkMode"
-        ActionCenterToggleButton {
-            toggleModel: DarkModeToggle {}
-            icon: "dark-theme"
-        }
-    }
-    DelegateChoice {
         roleValue: "easyEffects"
         ActionCenterToggleButton {
             toggleModel: EasyEffectsToggle {}
@@ -113,16 +106,6 @@ DelegateChooser {
         }
     }
     DelegateChoice {
-        roleValue: "nightLight"
-        ActionCenterToggleButton {
-            toggleModel: NightLightToggle {}
-            icon: WIcons.nightLightIcon
-            menu: Component {
-                NightLightControl {}
-            }
-        }
-    }
-    DelegateChoice {
         roleValue: "notifications"
         ActionCenterToggleButton {
             toggleModel: NotificationToggle {}
@@ -142,13 +125,6 @@ DelegateChooser {
             toggleModel: PowerProfilesToggle {}
             icon: WIcons.powerProfileIcon
             name: toggleModel.statusText
-        }
-    }
-    DelegateChoice {
-        roleValue: "screenSnip"
-        ActionCenterToggleButton {
-            toggleModel: ScreenSnipToggle {}
-            icon: "cut"
         }
     }
 }

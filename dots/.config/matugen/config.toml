@@ -1,34 +1,131 @@
 [config]
-version_check = false
+# General configuration options
 
-[templates.m3colors]
-input_path = '~/.config/matugen/templates/colors.json'
-output_path = '~/.local/state/quickshell/user/generated/colors.json'
-
-[templates.hyprland]
-input_path = '~/.config/matugen/templates/hyprland/colors.lua'
-output_path = '~/.config/hypr/hyprland/colors.lua'
-
-[templates.hyprlock]
-input_path = '~/.config/matugen/templates/hyprland/hyprlock-colors.conf'
-output_path = '~/.config/hypr/hyprlock/colors.conf'
-
-[templates.fuzzel]
-input_path = '~/.config/matugen/templates/fuzzel/fuzzel_theme.ini'
-output_path = '~/.config/fuzzel/fuzzel_theme.ini'
+# -----------------------------------------------------------------------------
+# GTK & Qt
+# -----------------------------------------------------------------------------
 
 [templates.gtk3]
-input_path = '~/.config/matugen/templates/gtk-3.0/gtk.css'
-output_path = '~/.config/gtk-3.0/gtk.css'
+input_path  = '~/.config/matugen/templates/gtk-colors.css'
+output_path = '~/.config/matugen/generated/gtk-3.css'
+post_hook   = '''
+  mkdir -p "$HOME/.config/gtk-3.0"
+  ln -nfs "$HOME/.config/matugen/generated/gtk-3.css" "$HOME/.config/gtk-3.0/gtk.css"
+  gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3" || :
+'''
 
 [templates.gtk4]
-input_path = '~/.config/matugen/templates/gtk-4.0/gtk.css'
-output_path = '~/.config/gtk-4.0/gtk.css'
+input_path  = '~/.config/matugen/templates/gtk-colors.css'
+output_path = '~/.config/matugen/generated/gtk-4.css'
+post_hook   = '''
+  mkdir -p "$HOME/.config/gtk-4.0"
+  ln -nfs "$HOME/.config/matugen/generated/gtk-4.css" "$HOME/.config/gtk-4.0/gtk.css"
+  ln -nfs "/usr/share/themes/adw-gtk3/gtk-4.0/libadwaita.css" "$HOME/.config/gtk-4.0/libadwaita.css"
+  ln -nfs "/usr/share/themes/adw-gtk3/gtk-4.0/libadwaita-tweaks.css" "$HOME/.config/gtk-4.0/libadwaita-tweaks.css"
+'''
 
-[templates.kde_colors]
-input_path = '~/.config/matugen/templates/kde/color.txt'
-output_path = '~/.local/state/quickshell/user/generated/color.txt'
+[templates.icon_theme]
+input_path  = '/dev/null'
+output_path = '/dev/null'
+post_hook   = 'gsettings set org.gnome.desktop.interface icon-theme "Papirus" || :'
 
-[templates.wallpaper]
-input_path = '~/.config/matugen/templates/wallpaper.txt'
-output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'
+[templates.qt5ct]
+input_path  = '~/.config/matugen/templates/qtct-colors.conf'
+output_path = '~/.config/matugen/generated/qt5ct-colors.conf'
+
+[templates.qt6ct]
+input_path  = '~/.config/matugen/templates/qtct-colors.conf'
+output_path = '~/.config/matugen/generated/qt6ct-colors.conf'
+
+[templates.kvantum_kvconfig]
+input_path = '~/.config/matugen/templates/kvantum-colors.kvconfig'
+output_path = '~/.config/matugen/generated/kvantum-matugen.kvconfig'
+post_hook = 'mkdir -p "$HOME/.config/Kvantum/matugen" && ln -nfs "$HOME/.config/matugen/generated/kvantum-matugen.kvconfig" "$HOME/.config/Kvantum/matugen/matugen.kvconfig"'
+
+[templates.kvantum_svg]
+input_path = '~/.config/matugen/templates/kvantum-colors.svg'
+output_path = '~/.config/matugen/generated/kvantum-matugen.svg'
+post_hook = 'mkdir -p "$HOME/.config/Kvantum/matugen" && ln -nfs "$HOME/.config/matugen/generated/kvantum-matugen.svg" "$HOME/.config/Kvantum/matugen/matugen.svg"'
+
+[templates.opencode]
+input_path = '~/.config/matugen/templates/opencode-colors.json'
+output_path = '~/.config/matugen/generated/opencode.json'
+post_hook   = '''
+mkdir -p "$HOME/.config/opencode/themes"
+ln -nfs "$HOME/.config/matugen/generated/opencode.json" "$HOME/.config/opencode/themes/matugen.json"
+pkill -SIGUSR1 -x kitty || :
+'''
+
+[templates.vscode]
+input_path  = '~/.config/matugen/templates/vscode.json'
+output_path = '~/.config/matugen/generated/vscode.json'
+post_hook   = '''
+sh -c 'if command -v vscodium >/dev/null 2>&1; then
+  ln -nfs "$HOME/.config/matugen/generated/vscode.json" "$HOME/.config/VSCodium/User/settings.json"
+fi'
+'''
+
+[templates.starship]
+input_path = '~/.config/matugen/templates/starship-colors.toml'
+output_path = '~/.config/matugen/generated/starship-colors.toml'
+post_hook = 'ln -nfs "$HOME/.config/matugen/generated/starship-colors.toml" "$HOME/.config/starship.toml"'
+
+[templates.vesktop]
+input_path  = '~/.config/matugen/templates/midnight-discord.css'
+output_path = '~/.config/matugen/generated/midnight-discord.css'
+post_hook   = '''
+sh -c 'if command -v vesktop >/dev/null 2>&1; then
+  mkdir -p "$HOME/.config/vesktop/themes/"
+  ln -nfs "$HOME/.config/matugen/generated/midnight-discord.css" "$HOME/.config/vesktop/themes/midnight-discord.css"
+fi'
+'''
+
+[templates.spicetify]
+input_path  = '~/.config/matugen/templates/spotify-colors.ini'
+output_path = '~/.config/matugen/generated/spotify-colors.ini'
+post_hook   = '''
+sh -c 'if command -v spicetify >/dev/null 2>&1 && [ -d "$HOME/.config/spicetify/Themes/Comfy" ]; then
+    ln -nfs "$HOME/.config/matugen/generated/spotify-colors.ini" "$HOME/.config/spicetify/Themes/Comfy/color.ini"
+    spicetify apply -n || :
+    hyprctl dispatch sendshortcut "CTRL SHIFT, R, class:^(spotify)$" || :
+fi'
+'''
+
+[templates.steam]
+input_path  = '~/.config/matugen/templates/steam.css'
+output_path = '~/.config/matugen/generated/steam.css'
+post_hook = '''
+sh -c 'if command -v adwaita-steam-gtk >/dev/null 2>&1; then
+    gsettings set io.github.Foldex.AdwSteamGtk prefs-install-custom-css true || :
+    gsettings set io.github.Foldex.AdwSteamGtk window-controls-layout-options "None" || :
+    mkdir -p "$HOME/.config/AdwSteamGtk"
+    ln -nfs "$HOME/.config/matugen/generated/steam.css" "$HOME/.config/AdwSteamGtk/custom.css"
+    adwaita-steam-gtk -i || :
+fi'
+'''
+
+[templates.cava]
+input_path  = '~/.config/matugen/templates/cava-colors.ini'
+output_path = '~/.config/matugen/generated/cava-colors.ini'
+post_hook   = '''
+sh -c 'if command -v cava >/dev/null 2>&1; then
+  mkdir -p "$HOME/.config/cava/themes"
+  ln -nfs "$HOME/.config/matugen/generated/cava-colors.ini" "$HOME/.config/cava/themes/cava-colors.ini"
+  pkill -USR1 -x cava || :
+fi'
+'''
+
+[templates.btop]
+input_path  = '~/.config/matugen/templates/btop.theme'
+output_path = '~/.config/matugen/generated/btop-colors.theme'
+post_hook   = '''
+sh -c 'if command -v btop >/dev/null 2>&1; then
+  mkdir -p "$HOME/.config/btop/themes"
+  ln -nfs "$HOME/.config/matugen/generated/btop-colors.theme" "$HOME/.config/btop/themes/matugen.theme"
+fi'
+'''
+
+[templates.conclude_notify]
+input_path  = '/dev/null'
+output_path = '/dev/null'
+post_hook   = 'notify-send -i applications-graphics-symbolic "Theme Updated" || :'

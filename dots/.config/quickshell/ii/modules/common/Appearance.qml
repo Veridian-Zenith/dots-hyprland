@@ -6,8 +6,89 @@ pragma ComponentBehavior: Bound
 
 Singleton {
     id: root
-    property QtObject m3colors
+    property QtObject m3colors: QtObject {
+        property bool darkmode: true
+        property bool transparent: Config?.options?.appearance?.transparency?.enable && Config?.options?.appearance?.transparency?.backgroundTransparency > 0
+        property color m3background: "#0d0103"
+        property color m3onBackground: "#ceb3bb"
+        property color m3surface: "#0e0305"
+        property color m3surfaceDim: "#0d0103"
+        property color m3surfaceBright: "#170b0d"
+        property color m3surfaceContainerLowest: "#110306"
+        property color m3surfaceContainerLow: "#140609"
+        property color m3surfaceContainer: "#180a0d"
+        property color m3surfaceContainerHigh: "#1e1013"
+        property color m3surfaceContainerHighest: "#25171a"
+        property color m3onSurface: "#ceb3bb"
+        property color m3surfaceVariant: "#2d1b1e"
+        property color m3onSurfaceVariant: "#a08c91"
+        property color m3inverseSurface: "#ceb3bb"
+        property color m3inverseOnSurface: "#0d0103"
+        property color m3outline: "#785e63"
+        property color m3outlineVariant: "#482e32"
+        property color m3shadow: "#000000"
+        property color m3scrim: "#000000"
+        property color m3surfaceTint: "#ceb3bb"
+        property color m3primary: "#ceb3bb"
+        property color m3onPrimary: "#000000"
+        property color m3primaryContainer: "#3e2426"
+        property color m3onPrimaryContainer: "#ceb3bb"
+        property color m3inversePrimary: "#6d5257"
+        property color m3secondary: "#b099a0"
+        property color m3onSecondary: "#000000"
+        property color m3secondaryContainer: "#332022"
+        property color m3onSecondaryContainer: "#ceb3bb"
+        property color m3tertiary: "#ceb3bb"
+        property color m3onTertiary: "#000000"
+        property color m3tertiaryContainer: "#3e2426"
+        property color m3onTertiaryContainer: "#ceb3bb"
+        property color m3error: "#ceb3bb"
+        property color m3onError: "#000000"
+        property color m3errorContainer: "#3e2426"
+        property color m3onErrorContainer: "#ceb3bb"
+        property color m3primaryFixed: "#ceb3bb"
+        property color m3primaryFixedDim: "#8e7579"
+        property color m3onPrimaryFixed: "#000000"
+        property color m3onPrimaryFixedVariant: "#ceb3bb"
+        property color m3secondaryFixed: "#b099a0"
+        property color m3secondaryFixedDim: "#7a6469"
+        property color m3onSecondaryFixed: "#000000"
+        property color m3onSecondaryFixedVariant: "#ceb3bb"
+        property color m3tertiaryFixed: "#ceb3bb"
+        property color m3tertiaryFixedDim: "#8e7579"
+        property color m3onTertiaryFixed: "#000000"
+        property color m3onTertiaryFixedVariant: "#ceb3bb"
+        property color term0: "#0d0103"
+        property color term1: "#941a1a"
+        property color term2: "#c02121"
+        property color term3: "#cc2444"
+        property color term4: "#e05451"
+        property color term5: "#e2635b"
+        property color term6: "#e2665f"
+        property color term7: "#ceb3bb"
+        property color term8: "#907d82"
+        property color term9: "#941a1a"
+        property color term10: "#c02121"
+        property color term11: "#cc2444"
+        property color term12: "#e05451"
+        property color term13: "#e2635b"
+        property color term14: "#e2665f"
+        property color term15: "#ceb3bb"
+    }
+    property QtObject vzcolors: QtObject {
+        property color bgPrimary: "#050200"
+        property color bgSecondary: "#0f0a05"
+        property color accentVibrant: "#FFB347"
+        property color accentMuted: "#99FFB347"
+        property color glowColor: "#CCFFB347"
+        property color gradient1: "#FFB347"
+        property color gradient2: "#D72638"
+        property color gradient3: "#FFB347"
+        property color borderColor: "#33FFB347"
+        property color textColorSecondary: "#d1d5db"
+    }
     property QtObject animation
+
     property QtObject animationCurves
     property QtObject colors
     property QtObject rounding
@@ -28,85 +109,14 @@ Singleton {
     property real autoBackgroundTransparency: { // y = 0.5768x^2 - 0.759x + 0.2896
         let x = wallpaperVibrancy
         let y = 0.5768 * (x * x) - 0.759 * (x) + 0.2896
-        return Math.max(0, Math.min(0.22, y)) - 0.12 * (m3colors.darkmode ? 0 : 1)
+        return Math.max(0, Math.min(0.35, y)) - 0.12 * (m3colors.darkmode ? 0 : 1)
     }
     property real autoContentTransparency: 0.9
     property real backgroundTransparency: Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.automatic ? autoBackgroundTransparency : Config?.options.appearance.transparency.backgroundTransparency : 0
     property real contentTransparency: Config?.options.appearance.transparency.automatic ? autoContentTransparency : Config?.options.appearance.transparency.contentTransparency
 
-    m3colors: QtObject {
-        property bool darkmode: true
-        property bool transparent: false
-        property color m3background: "#141313"
-        property color m3onBackground: "#e6e1e1"
-        property color m3surface: "#141313"
-        property color m3surfaceDim: "#141313"
-        property color m3surfaceBright: "#3a3939"
-        property color m3surfaceContainerLowest: "#0f0e0e"
-        property color m3surfaceContainerLow: "#1c1b1c"
-        property color m3surfaceContainer: "#201f20"
-        property color m3surfaceContainerHigh: "#2b2a2a"
-        property color m3surfaceContainerHighest: "#363435"
-        property color m3onSurface: "#e6e1e1"
-        property color m3surfaceVariant: "#49464a"
-        property color m3onSurfaceVariant: "#cbc5ca"
-        property color m3inverseSurface: "#e6e1e1"
-        property color m3inverseOnSurface: "#313030"
-        property color m3outline: "#948f94"
-        property color m3outlineVariant: "#49464a"
-        property color m3shadow: "#000000"
-        property color m3scrim: "#000000"
-        property color m3surfaceTint: "#cbc4cb"
-        property color m3primary: "#cbc4cb"
-        property color m3onPrimary: "#322f34"
-        property color m3primaryContainer: "#2d2a2f"
-        property color m3onPrimaryContainer: "#bcb6bc"
-        property color m3inversePrimary: "#615d63"
-        property color m3secondary: "#cac5c8"
-        property color m3onSecondary: "#323032"
-        property color m3secondaryContainer: "#4d4b4d"
-        property color m3onSecondaryContainer: "#ece6e9"
-        property color m3tertiary: "#d1c3c6"
-        property color m3onTertiary: "#372e30"
-        property color m3tertiaryContainer: "#31292b"
-        property color m3onTertiaryContainer: "#c1b4b7"
-        property color m3error: "#ffb4ab"
-        property color m3onError: "#690005"
-        property color m3errorContainer: "#93000a"
-        property color m3onErrorContainer: "#ffdad6"
-        property color m3primaryFixed: "#e7e0e7"
-        property color m3primaryFixedDim: "#cbc4cb"
-        property color m3onPrimaryFixed: "#1d1b1f"
-        property color m3onPrimaryFixedVariant: "#49454b"
-        property color m3secondaryFixed: "#e6e1e4"
-        property color m3secondaryFixedDim: "#cac5c8"
-        property color m3onSecondaryFixed: "#1d1b1d"
-        property color m3onSecondaryFixedVariant: "#484648"
-        property color m3tertiaryFixed: "#eddfe1"
-        property color m3tertiaryFixedDim: "#d1c3c6"
-        property color m3onTertiaryFixed: "#211a1c"
-        property color m3onTertiaryFixedVariant: "#4e4447"
-        property color m3success: "#B5CCBA"
-        property color m3onSuccess: "#213528"
-        property color m3successContainer: "#374B3E"
-        property color m3onSuccessContainer: "#D1E9D6"
-        property color term0: "#EDE4E4"
-        property color term1: "#B52755"
-        property color term2: "#A97363"
-        property color term3: "#AF535D"
-        property color term4: "#A67F7C"
-        property color term5: "#B2416B"
-        property color term6: "#8D76AD"
-        property color term7: "#272022"
-        property color term8: "#0E0D0D"
-        property color term9: "#B52755"
-        property color term10: "#A97363"
-        property color term11: "#AF535D"
-        property color term12: "#A67F7C"
-        property color term13: "#B2416B"
-        property color term14: "#8D76AD"
-        property color term15: "#221A1A"
-    }
+    // Pywal-driven color system (replaces Matugen/M3 hardcoded colors)
+    // Maps wal's 16-color palette to semantic roles matching website aesthetic
 
     colors: QtObject {
         property color colSubtext: m3colors.m3outline
@@ -185,7 +195,7 @@ Singleton {
         property color colTooltip: m3colors.m3inverseSurface
         property color colOnTooltip: m3colors.m3inverseOnSurface
         property color colScrim: ColorUtils.transparentize(m3colors.m3scrim, 0.5)
-        property color colShadow: ColorUtils.transparentize(m3colors.m3shadow, 0.7)
+        property color colShadow: ColorUtils.transparentize(vzcolors.accentVibrant, 0.8)
         property color colOutline: m3colors.m3outline
         property color colOutlineVariant: m3colors.m3outlineVariant
         property color colError: m3colors.m3error
@@ -201,26 +211,26 @@ Singleton {
     rounding: QtObject {
         property int unsharpen: 2
         property int unsharpenmore: 6
-        property int verysmall: 8
-        property int small: 12
-        property int normal: 17
-        property int large: 23
-        property int verylarge: 30
+        property int verysmall: 10
+        property int small: 16
+        property int normal: 22
+        property int large: 30
+        property int verylarge: 38
         property int full: 9999
         property int screenRounding: large
-        property int windowRounding: 18
+        property int windowRounding: 24
     }
 
     font: QtObject {
         property QtObject family: QtObject {
             property string main: Config.options.appearance.fonts.main
             property string numbers: Config.options.appearance.fonts.numbers
-            property string title: Config.options.appearance.fonts.title
-            property string iconMaterial: "Material Symbols Rounded"
+            property string title: "Rosemary"
+            property string iconMaterial: Config.options.appearance.fonts.iconMaterial
             property string iconNerd: Config.options.appearance.fonts.iconNerd
             property string monospace: Config.options.appearance.fonts.monospace
             property string reading: Config.options.appearance.fonts.reading
-            property string expressive: Config.options.appearance.fonts.expressive
+            property string expressive: "Rosemary"
         }
         property QtObject variableAxes: QtObject {
             property var main: ({
@@ -230,20 +240,20 @@ Singleton {
             property var numbers: ({
                 "wght": 450,
             })
-            property var title: ({ // Slightly bold weight for title
-                "wght": 550, // Weight (Lowered to compensate for increased grade)
+            property var title: ({
+                "wght": 550,
             })
         }
         property QtObject pixelSize: QtObject {
-            property int smallest: 10
-            property int smaller: 12
-            property int smallie: 13
-            property int small: 15
-            property int normal: 16
-            property int large: 17
-            property int larger: 19
-            property int huge: 22
-            property int hugeass: 23
+            property int smallest: 11
+            property int smaller: 13
+            property int smallie: 14
+            property int small: 16
+            property int normal: 17
+            property int large: 18
+            property int larger: 20
+            property int huge: 24
+            property int hugeass: 26
             property int title: huge
         }
     }

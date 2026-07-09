@@ -401,7 +401,7 @@ function install_cmds(){
         esac
       done
       v sudo pacman -Syu
-      v sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+      v sudo pacman -S --noconfirm --needed --overwrite '*' "${pkgs[@]}"
       ;;
     "debian")
       local pkgs=()

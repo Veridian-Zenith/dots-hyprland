@@ -2,9 +2,11 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Hyprland
@@ -47,16 +49,37 @@ Item {
     StyledRectangularShadow {
         target: sidebarRightBackground
     }
+    RectangularGlow {
+        anchors.fill: sidebarRightBackground
+        anchors.margins: -2
+        glowRadius: 6
+        spread: 0.06
+        color: Appearance.vzcolors.glowColor
+        cornerRadius: sidebarRightBackground.radius + 2
+        opacity: 0.15
+    }
     Rectangle {
         id: sidebarRightBackground
 
         anchors.fill: parent
         implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
         implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
-        color: Appearance.colors.colLayer0
+        color: Config.options.appearance.transparency.liquidGlass
+            ? ColorUtils.applyAlpha(Appearance.vzcolors.bgPrimary, 0.45)
+            : ColorUtils.transparentize(Appearance.vzcolors.bgPrimary, 0.15)
         border.width: 1
-        border.color: Appearance.colors.colLayer0Border
-        radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+        border.color: Appearance.vzcolors.borderColor
+        radius: Appearance.rounding.large
+        clip: true
+
+        Rectangle {
+            anchors.fill: parent
+            radius: parent.radius
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.06) }
+            }
+        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -217,7 +240,9 @@ Item {
                 bottom: parent.bottom
                 left: parent.left
             }
-            color: Appearance.colors.colLayer1
+            color: Appearance.vzcolors.bgSecondary
+            border.width: 1
+            border.color: Appearance.vzcolors.borderColor
             radius: height / 2
             implicitWidth: uptimeRow.implicitWidth + 24
             implicitHeight: uptimeRow.implicitHeight + 8
@@ -233,12 +258,12 @@ Item {
                     height: 25
                     source: SystemInfo.distroIcon
                     colorize: true
-                    color: Appearance.colors.colOnLayer0
+                    color: Appearance.m3colors.m3onBackground
                 }
                 StyledText {
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Appearance.font.pixelSize.normal
-                    color: Appearance.colors.colOnLayer0
+                    color: Appearance.m3colors.m3onBackground
                     text: Translation.tr("Up %1").arg(DateTime.uptime)
                     textFormat: Text.MarkdownText
                 }
@@ -252,7 +277,9 @@ Item {
                 bottom: parent.bottom
                 right: parent.right
             }
-            color: Appearance.colors.colLayer1
+            color: Appearance.vzcolors.bgSecondary
+            border.width: 1
+            border.color: Appearance.vzcolors.borderColor
             padding: 4
 
             QuickToggleButton {

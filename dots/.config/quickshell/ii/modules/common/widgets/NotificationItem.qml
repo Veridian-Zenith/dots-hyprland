@@ -115,6 +115,10 @@ Item { // Notification item area
         anchors.left: parent.left
         radius: Appearance.rounding.small
         anchors.leftMargin: root.xOffset
+        border.width: 1
+        border.color: (notificationObject.urgency == NotificationUrgency.Critical) ?
+            ColorUtils.transparentize(Appearance.m3colors.m3error, 0.6) :
+            ColorUtils.transparentize(Appearance.m3colors.m3primary, 0.85)
 
         Behavior on anchors.leftMargin {
             enabled: !dragManager.dragging

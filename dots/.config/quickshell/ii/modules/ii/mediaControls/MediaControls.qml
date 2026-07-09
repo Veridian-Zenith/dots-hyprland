@@ -162,11 +162,22 @@ Scope {
                     Rectangle {
                         id: placeholderBackground
                         anchors.centerIn: parent
-                        color: Appearance.colors.colLayer0
+                        color: ColorUtils.transparentize(Appearance.vzcolors.bgSecondary, 0.15)
+                        border.width: 1
+                        border.color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.88)
                         radius: root.popupRounding
                         property real padding: 20
                         implicitWidth: placeholderLayout.implicitWidth + padding * 2
                         implicitHeight: placeholderLayout.implicitHeight + padding * 2
+
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: parent.radius
+                            gradient: Gradient {
+                                GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+                                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.05) }
+                            }
+                        }
 
                         ColumnLayout {
                             id: placeholderLayout
@@ -175,9 +186,10 @@ Scope {
                             StyledText {
                                 text: Translation.tr("No active player")
                                 font.pixelSize: Appearance.font.pixelSize.large
+                                color: Appearance.m3colors.m3onBackground
                             }
                             StyledText {
-                                color: Appearance.colors.colSubtext
+                                color: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.65)
                                 text: Translation.tr("Make sure your player has MPRIS support\nor try turning off duplicate player filtering")
                                 font.pixelSize: Appearance.font.pixelSize.small
                             }

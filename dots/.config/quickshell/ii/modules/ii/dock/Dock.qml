@@ -6,6 +6,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
 import Quickshell.Widgets
@@ -81,16 +82,35 @@ Scope { // Scope
                         StyledRectangularShadow {
                             target: dockVisualBackground
                         }
+                        RectangularGlow {
+                            anchors.fill: dockVisualBackground
+                            anchors.margins: -2
+                            glowRadius: 6
+                            spread: 0.06
+                            color: Appearance.vzcolors.glowColor
+                            cornerRadius: dockVisualBackground.radius + 4
+                            opacity: 0.15
+                        }
                         Rectangle { // The real rectangle that is visible
                             id: dockVisualBackground
                             property real margin: Appearance.sizes.elevationMargin
                             anchors.fill: parent
                             anchors.topMargin: Appearance.sizes.elevationMargin
                             anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
-                            color: Appearance.colors.colLayer0
+                            color: ColorUtils.transparentize(Appearance.vzcolors.bgPrimary, 0.15)
                             border.width: 1
-                            border.color: Appearance.colors.colLayer0Border
+                            border.color: Appearance.vzcolors.borderColor
                             radius: Appearance.rounding.large
+                            clip: true
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: parent.radius
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+                                    GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.06) }
+                                }
+                            }
                         }
 
                         RowLayout {

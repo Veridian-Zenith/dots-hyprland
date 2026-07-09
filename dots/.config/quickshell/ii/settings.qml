@@ -29,6 +29,11 @@ ApplicationWindow {
             component: "modules/settings/QuickConfig.qml"
         },
         {
+            name: Translation.tr("Appearance"),
+            icon: "palette",
+            component: "modules/settings/AppearanceConfig.qml"
+        },
+        {
             name: Translation.tr("General"),
             icon: "browse",
             component: "modules/settings/GeneralConfig.qml"
@@ -222,8 +227,45 @@ ApplicationWindow {
                         }
                     }
 
-                    Item {
+                    Column {
                         Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignBottom
+                        Layout.bottomMargin: 8
+                        spacing: 4
+
+                        RippleButton {
+                            id: reloadQsBtn
+                            implicitWidth: navRail.expanded ? 130 : 40
+                            implicitHeight: 36
+                            buttonRadius: Appearance.rounding.verysmall
+                            colBackground: Appearance.colors.colPrimaryContainer
+                            colBackgroundHover: Appearance.colors.colPrimaryContainerHover
+                            colRipple: Appearance.colors.colPrimaryContainerActive
+                            onClicked: {
+                                reloadQsBtn.enabled = false
+                                Quickshell.execDetached(["bash", "-c",
+                                    "killall ydotool qs quickshell 2>/dev/null; qs -c $qsConfig &"]
+                                )
+                            }
+                            contentItem: RowLayout {
+                                anchors.centerIn: parent
+                                spacing: 6
+                                MaterialSymbol {
+                                    iconSize: 18
+                                    text: "refresh"
+                                    color: Appearance.colors.colOnPrimaryContainer
+                                }
+                                StyledText {
+                                    visible: navRail.expanded
+                                    text: Translation.tr("Reload Shell")
+                                    color: Appearance.colors.colOnPrimaryContainer
+                                    font.pixelSize: 12
+                                }
+                            }
+                            StyledToolTip {
+                                text: Translation.tr("Restart Quickshell to apply changes")
+                            }
+                        }
                     }
                 }
             }

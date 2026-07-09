@@ -8,6 +8,7 @@ import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell.Io
+import Quickshell
 
 import qs.modules.ii.background.widgets.clock.dateIndicator
 import qs.modules.ii.background.widgets.clock.minuteMarks
@@ -68,7 +69,8 @@ Item {
 
     FileView {
         id: categoryFileView
-        path: Config.ready ? Directories.generatedWallpaperCategoryPath : ""
+        path: (Config.ready && Config.options.background.widgets.clock.cookie.aiStyling)
+            ? Directories.generatedWallpaperCategoryPath : ""
         watchChanges: true
         onFileChanged: reload()
         onLoaded: {
@@ -206,6 +208,13 @@ Item {
         sourceComponent: DateIndicator {
             color: root.colBackgroundInfo
             style: Config.options.background.widgets.clock.cookie.dateStyle
+        }
+    }
+
+    Component.onCompleted: {
+        if (Config.options.background.widgets.clock.cookie.aiStyling) {
+            Quickshell.execDetached(["mkdir", "-p", FileUtils.trimFileProtocol(`${Directories.state}/user/generated`)])
+            Quickshell.execDetached(["touch", Directories.generatedWallpaperCategoryPath])
         }
     }
 }

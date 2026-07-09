@@ -1,5 +1,6 @@
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 
 RippleButton {
@@ -18,15 +19,15 @@ RippleButton {
 
     background.anchors.fill: button
     buttonRadius: Appearance.rounding.full
-    colBackground: Appearance.colors.colLayer2
-    colBackgroundHover: Appearance.colors.colLayer2Hover
-    colRipple: Appearance.colors.colLayer2Active
+    colBackground: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.92)
+    colBackgroundHover: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.85)
+    colRipple: ColorUtils.transparentize(Appearance.vzcolors.accentVibrant, 0.75)
 
     contentItem: StyledText {
         text: buttonText
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: Appearance.font.pixelSize.larger
-        color: Appearance.colors.colOnLayer1
+        color: Appearance.m3colors.m3onBackground
     }
 
     StyledToolTip {

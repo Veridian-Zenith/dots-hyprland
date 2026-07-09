@@ -150,14 +150,15 @@ Item {
         spacing: root.padding
 
         Item {
+            id: animePageItem
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
-                    width: swipeView.width
-                    height: swipeView.height
+                    width: animePageItem.width
+                    height: animePageItem.height
                     radius: Appearance.rounding.small
                 }
             }

@@ -3,9 +3,11 @@ pragma ComponentBehavior: Bound
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 
 PopupWindow {
@@ -60,6 +62,16 @@ PopupWindow {
             opacity: popupBackground.opacity
         }
 
+        RectangularGlow {
+            anchors.fill: popupBackground
+            anchors.margins: -2
+            glowRadius: 5
+            spread: 0.05
+            color: Appearance.vzcolors.glowColor
+            cornerRadius: popupBackground.radius + 2
+            opacity: 0.12
+        }
+
         Rectangle {
             id: popupBackground
             readonly property real padding: 4
@@ -72,11 +84,20 @@ PopupWindow {
                 margins: root.padding
             }
 
-            color: Appearance.colors.colLayer0
+            color: ColorUtils.transparentize(Appearance.vzcolors.bgPrimary, 0.15)
             radius: Appearance.rounding.windowRounding
             border.width: 1
-            border.color: Appearance.colors.colLayer0Border
+            border.color: Appearance.vzcolors.borderColor
             clip: true
+
+            Rectangle {
+                anchors.fill: parent
+                radius: parent.radius
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.03) }
+                    GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.06) }
+                }
+            }
 
             opacity: 0
             Component.onCompleted: opacity = 1
@@ -214,7 +235,7 @@ PopupWindow {
         Rectangle {
             Layout.fillWidth: true
             implicitHeight: 1
-            color: Appearance.colors.colSubtext
+            color: Appearance.vzcolors.textColorSecondary
             Layout.topMargin: 4
             Layout.bottomMargin: 4
         }

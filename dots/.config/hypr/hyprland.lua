@@ -42,3 +42,8 @@ end
 
 -- Shell overrides --
 require("hyprland.shellOverrides.main")
+
+-- Custom overrides (re-applies after shell colors) --
+if is_file_exists(HOME .. "/.config/hypr/custom/colors.lua") then
+    require("custom.colors")
+end

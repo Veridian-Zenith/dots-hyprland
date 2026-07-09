@@ -1,0 +1,7 @@
+groups=(illogical-impulse)
+pkgname=illogical-impulse-oreo-cursors-bin
+pkgver=$(date +%Y%m%d)
+pkgrel=1
+pkgdesc="Oreo Cursor Theme, installed for illogical-impulse dotfiles"
+arch=('any')
+depends=('oreo-cursors-bin')

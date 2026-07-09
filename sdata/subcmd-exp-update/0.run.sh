@@ -671,7 +671,7 @@ build_packages() {
       continue
     }
 
-    if makepkg -sCi --noconfirm; then
+    if makepkg -sC && sudo pacman -U --needed --noconfirm --overwrite '*' *.pkg.tar.zst; then
       log_success "Successfully built and installed $pkg_name"
       ((rebuilt_packages++)) || true
     else

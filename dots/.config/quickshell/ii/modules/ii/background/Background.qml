@@ -60,12 +60,12 @@ Variants {
         readonly property bool verticalParallax: (Config.options.background.parallax.autoVertical && wallpaperHeight > wallpaperWidth) || Config.options.background.parallax.vertical
         // Colors
         property bool shouldBlur: (GlobalStates.screenLocked && Config.options.lock.blur.enable)
-        property color dominantColor: Appearance.colors.colPrimary // Default, to be changed
+        property color dominantColor: Appearance.vzcolors.accentVibrant // Default, to be changed
         property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
         property color colText: {
             if (wallpaperSafetyTriggered)
-                return CF.ColorUtils.mix(Appearance.colors.colOnLayer0, Appearance.colors.colPrimary, 0.75);
-            return (GlobalStates.screenLocked && shouldBlur) ? Appearance.colors.colOnLayer0 : CF.ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12));
+                return CF.ColorUtils.mix(Appearance.m3colors.m3onBackground, Appearance.vzcolors.accentVibrant, 0.75);
+            return (GlobalStates.screenLocked && shouldBlur) ? Appearance.m3colors.m3onBackground : CF.ColorUtils.colorWithLightness(Appearance.vzcolors.accentVibrant, (dominantColorIsDark ? 0.8 : 0.12));
         }
         Behavior on colText {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
