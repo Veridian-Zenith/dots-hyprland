@@ -9,5 +9,6 @@ depends=(
   bluez
   hyprland-git
   hyprsunset-git
+  hyprland-qt-support-git
   wl-clipboard
 )
