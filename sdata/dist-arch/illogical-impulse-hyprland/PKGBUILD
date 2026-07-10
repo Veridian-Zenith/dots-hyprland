@@ -7,8 +7,17 @@ arch=(any)
 license=(None)
 depends=(
   bluez
+  hyprland-protocols-git
+  hyprwayland-scanner-git
+  hyprutils-git
+  hyprgraphics-git
+  hyprlang-git
+  hyprcursor-git
+  aquamarine-git
+  xdg-desktop-portal-hyprland-git
+  hyprwire-git
+  hyprtoolkit-git
   hyprland-git
-  hyprsunset-git
   hyprland-qt-support-git
   wl-clipboard
 )
