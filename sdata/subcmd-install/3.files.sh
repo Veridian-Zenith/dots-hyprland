@@ -170,26 +170,6 @@ function install_dir__sync_exclude(){
   fi
   v rsync_dir__sync_exclude $s $t "$@"
 }
-function install_google_sans_flex(){
-  local font_name="Google Sans Flex"
-  local src_name="google-sans-flex"
-  local src_url="https://github.com/end-4/google-sans-flex"
-  local src_dir="$REPO_ROOT/cache/$src_name"
-  local target_dir="${XDG_DATA_HOME}/fonts/illogical-impulse-$src_name"
-  if fc-list | grep -qi "$font_name"; then return; fi
-  x mkdir -p $src_dir
-  x cd $src_dir
-  try git init -b main
-  try git remote add origin $src_url
-  x git pull origin main 
-  x git submodule update --init --recursive
-  warning_overwrite
-  rsync_dir "$src_dir" "$target_dir" 
-  x fc-cache -fv
-  x cd $REPO_ROOT
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
-  realpath -se "$target_dir" >> "${INSTALLED_LISTFILE}"
-}
 
 #####################################################################################
 # In case some dirs does not exists
@@ -222,11 +202,6 @@ case "${EXPERIMENTAL_FILES_SCRIPT}" in
   true)source sdata/subcmd-install/3.files-exp.sh;;
   *)source sdata/subcmd-install/3.files-legacy.sh;;
 esac
-
-if [[ ! "$OS_GROUP_ID" == "fedora" ]]; then
-  showfun install_google_sans_flex
-  v install_google_sans_flex
-fi
 
 #####################################################################################
 

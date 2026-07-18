@@ -13,7 +13,7 @@ Singleton {
     id: root
 
     readonly property string devDir: FileUtils.trimFileProtocol(`${Directories.home}/VZ_Dev`)
-    readonly property string terminalCmd: "ghostty"
+    readonly property string terminalCmd: "kitty"
 
     property ListModel projects: ListModel {}
     property string activeGitBranch: ""

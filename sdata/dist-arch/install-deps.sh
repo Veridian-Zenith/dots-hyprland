@@ -16,24 +16,8 @@ install-yay(){
 remove_deprecated_dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RST}\n"
   local list=()
-  list+=(illogical-impulse-{microtex,pymyc-aur,oneui4-icons-git})
+  list+=(illogical-impulse-{microtex-git,quickshell-git,quickshell-git-bin,pymyc-aur,oneui4-icons-git})
   for i in ${list[@]};do try sudo pacman --noconfirm -Rdd $i;done
-}
-# NOTE: `implicitize_old_dependencies()` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
-# However, let's just keep it as references for other distros writing their `sdata/dist-<OS_GROUP_ID>/install-deps.sh`, if they need it.
-implicitize_old_dependencies(){
-# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
-  remove_bashcomments_emptylines ./sdata/dist-arch/previous_dependencies.conf ./cache/old_deps_stripped.conf
-  readarray -t old_deps_list < ./cache/old_deps_stripped.conf
-  pacman -Qeq > ./cache/pacman_explicit_packages
-  readarray -t explicitly_installed < ./cache/pacman_explicit_packages
-
-  echo "Attempting to set previously explicitly installed deps as implicit..."
-  for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
-    [ "$i" = "$j" ] && $AUR_HELPER -D --asdeps "$i"
-  done; done
-
-  return 0
 }
 
 #####################################################################################
@@ -69,11 +53,6 @@ else
 fi
 echo -e "${STY_BLUE}[$0]: Using AUR helper: ${AUR_HELPER}${STY_RST}"
 
-showfun implicitize_old_dependencies
-v implicitize_old_dependencies
-
-# https://github.com/end-4/dots-hyprland/issues/581
-# yay -Bi is kinda hit or miss, instead cd into the relevant directory and manually source and install deps
 install-local-pkgbuild() {
   local location=$1
   local installflags=$2
@@ -99,7 +78,5 @@ for i in "${metapkgs[@]}"; do
   v install-local-pkgbuild "$i" "$metainstallflags"
 done
 
-# Install quickshell from repos (not git version)
+# Install quickshell from repos
 v $AUR_HELPER -S --needed --noconfirm --overwrite '*' quickshell
-
-

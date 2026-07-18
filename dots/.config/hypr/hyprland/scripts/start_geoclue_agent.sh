@@ -10,9 +10,6 @@ fi
 AGENT_PATHS=(
   /usr/libexec/geoclue-2.0/demos/agent
   /usr/lib/geoclue-2.0/demos/agent
-  "$HOME/.nix-profile/libexec/geoclue-2.0/demos/agent"
-  "$HOME/.nix-profile/lib/geoclue-2.0/demos/agent"
-  /run/current-system/sw/libexec/geoclue-2.0/demos/agent
 )
 
 # Find the first valid agent path

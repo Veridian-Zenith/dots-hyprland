@@ -153,13 +153,13 @@ Singleton {
 
             property JsonObject apps: JsonObject {
                 property string bluetooth: "blueman"
-                property string changePassword: "ghostty --hold=yes fish -i -c 'passwd'"
+                property string changePassword: "kitty --hold fish -i -c 'passwd'"
                 property string network: "iwctl"
-                property string manageUser: "ghostty --hold=yes fish -i -c 'sudo nispasswd'"
+                property string manageUser: "kitty --hold fish -i -c 'sudo nispasswd'"
                 property string networkEthernet: "iwctl"
                 property string taskManager: "dgop"
-                property string terminal: "ghostty" // This is only for shell actions
-                property string update: "ghostty --hold=yes fish -i -c 'pkexec pacman -Syu'"
+                property string terminal: "kitty" // This is only for shell actions
+                property string update: "kitty --hold fish -i -c 'pkexec pacman -Syu'"
                 property string volumeMixer: `~/.config/hypr/hyprland/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
             }
 
@@ -332,7 +332,7 @@ Singleton {
                 property bool pinnedOnStartup: false
                 property bool hoverToReveal: true // When false, only reveals on empty workspace
                 property list<string> pinnedApps: [ // IDs of pinned entries
-                    "org.kde.dolphin", "com.mitchellh.ghostty",]
+                    "org.kde.dolphin", "net.kovidgoyal.kitty",]
                 property list<string> ignoredAppRegexes: []
             }
 
@@ -358,7 +358,7 @@ Singleton {
             }
 
             property JsonObject launcher: JsonObject {
-                property list<string> pinnedApps: [ "org.kde.dolphin", "com.mitchellh.ghostty", "cmake-gui"]
+                property list<string> pinnedApps: [ "org.kde.dolphin", "net.kovidgoyal.kitty", "cmake-gui"]
             }
 
             property JsonObject light: JsonObject {

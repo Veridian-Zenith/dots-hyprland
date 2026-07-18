@@ -1,3 +1,10 @@
+// Weather service using wttr.in with hardcoded coordinates as fallback.
+// Configure your location via:
+//   - GPS (bar.weather.enableGPS = true) - requires GeoClue
+//   - Hardcoded coordinates in getData() below (edit the fallback lat/long)
+//   - City name (bar.weather.city) is used as display label only, not for API queries
+// Temperature unit: bar.weather.useUSCS (Fahrenheit when true, Celsius when false)
+// Polling interval: bar.weather.fetchInterval (minutes)
 pragma Singleton
 pragma ComponentBehavior: Bound
 
@@ -12,7 +19,7 @@ Singleton {
     id: root
 
     readonly property int fetchInterval: Config.options.bar.weather.fetchInterval * 60 * 1000
-    readonly property bool useUSCS: false
+    readonly property bool useUSCS: Config.options.bar.weather.useUSCS
     property bool gpsActive: false
 
     property var location: ({
@@ -47,16 +54,28 @@ Singleton {
         temp.windDir = data?.current?.winddir16Point || "N";
         temp.wCode = data?.current?.weatherCode || "113";
 
-        // Dynamically assigned from the JSON response
-        temp.city = data?.location?.areaName[0]?.value || "Unknown City";
+        // City from API response, or user-configured fallback name
+        temp.city = data?.location?.areaName[0]?.value
+            || Config.options.bar.weather.city
+            || "Unknown City";
 
-        // Metric formatting
-        temp.wind = (data?.current?.windspeedKmph || 0) + " km/h";
-        temp.precip = (data?.current?.precipMM || 0) + " mm";
-        temp.visib = (data?.current?.visibility || 0) + " km";
-        temp.press = (data?.current?.pressure || 0) + " hPa";
-        temp.temp = (data?.current?.temp_C || 0) + "°C";
-        temp.tempFeelsLike = (data?.current?.FeelsLikeC || 0) + "°C";
+        if (root.useUSCS) {
+            // Imperial (USCS) formatting
+            temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
+            temp.precip = ((data?.current?.precipMM || 0) * 0.0393701).toFixed(2) + " in";
+            temp.visib = ((data?.current?.visibility || 0) * 0.621371).toFixed(1) + " mi";
+            temp.press = (data?.current?.pressure || 0) + " hPa";
+            temp.temp = (data?.current?.temp_F || 0) + "°F";
+            temp.tempFeelsLike = (data?.current?.FeelsLikeF || 0) + "°F";
+        } else {
+            // Metric (SI) formatting
+            temp.wind = (data?.current?.windspeedKmph || 0) + " km/h";
+            temp.precip = (data?.current?.precipMM || 0) + " mm";
+            temp.visib = (data?.current?.visibility || 0) + " km";
+            temp.press = (data?.current?.pressure || 0) + " hPa";
+            temp.temp = (data?.current?.temp_C || 0) + "°C";
+            temp.tempFeelsLike = (data?.current?.FeelsLikeC || 0) + "°C";
+        }
 
         temp.lastRefresh = DateTime.time + " • " + DateTime.date;
         root.data = temp;
@@ -68,7 +87,7 @@ Singleton {
         if (root.gpsActive && root.location.valid) {
             command += `/${root.location.lat},${root.location.long}`;
         } else {
-            // Hardcoded coordinates target
+            // Hardcoded coordinates - edit these to your location
             command += "/35.759200,-90.323100";
         }
 

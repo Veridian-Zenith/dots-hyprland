@@ -17,9 +17,9 @@ Tips:
 - `wireplumber`
   - Not explicitly used.
 - `pipewire-pulse`
-  - not explicitly used.
+  - Not explicitly used.
 - `libdbusmenu-gtk3`
-  - not explicitly used.
+  - Not explicitly used.
 - `playerctl`
   - Used in Hyprland and Quickshell config.
 
@@ -38,8 +38,6 @@ Tips:
   - Too many executables involved, not sure where been used.
 - `cliphist`
   - Used in Hyprland and Quickshell config.
-- `cmake`
-  - Used in building quickshell and MicroTeX.
 - `curl`
   - Used in Quickshell config.
 - `wget`
@@ -56,7 +54,7 @@ Tips:
   - Used in install script.
 
 ## illogical-impulse-fonts-themes
-- `adw-gtk-theme-git`
+- `adw-gtk-theme`
   - [source](https://github.com/lassekongo83/adw-gtk3)
   - Used in Quickshell config.
 - `breeze`
@@ -74,35 +72,68 @@ Tips:
   - Basic component which is nearly a must.
 - `kitty`
   - Used in fuzzel, Hyprland, kdeglobals and Quickshell config; kitty config is also included as dots.
-- `matugen-bin`
-  - Used in Quickshell.
+- `otf-atkinson-hyperlegible-next`
+  - Font name: `Atkinson Hyperlegible Next`
+  - System-wide default sans-serif/serif font via fontconfig.
 - `otf-space-grotesk`
   - [source](https://events.ccc.de/congress/2024/infos/styleguide.html)
-  - Used in Quickshell and matugen config.
+  - Used in Quickshell config.
 - `starship`
   - Used in Fish config.
+- `ttf-firacode-nerd`
+  - Font name: `FiraCode Nerd Font`
+  - Used as monospace font in Quickshell config.
+- `ttf-iosevkatermslab-nerd`
+  - Font name: `IosevkaTermSlab Nerd Font`
+  - Used as kitty terminal font.
 - `ttf-jetbrains-mono-nerd`
   - Font name: `JetBrains Mono NF`, `JetBrainsMono Nerd Font`.
   - Used in foot, kdeglobals, kitty, qt5ct, qt6ct and Quickshell config.
-- `ttf-material-symbols-variable-git`
+- `ttf-material-symbols-variable`
   - Font name: `Material Symbols Rounded`, `Material Symbols Outlined`
-  - Used in Hyprland, matugen, Quickshell and wlogout config.
+  - Used in Hyprland, Quickshell and wlogout config.
 - `ttf-readex-pro`
   - Font name: `Readex Pro`
   - Used in Quickshell config.
 - `ttf-rubik-vf`
   - Font name: `Rubik`, `Rubik Light`
-  - Used in Hyprland, kdeglobals, matugen, qt5ct, qt6ct and Quickshell config.
+  - Used in Hyprland, kdeglobals, qt5ct, qt6ct and Quickshell config.
 - `ttf-twemoji`
   - Not explicitly used, but it may help as fallback for displaying emoji characters.
 
+### Bundled Fonts (installed from repo, not packages)
+- **Google Sans Flex** - Variable font for UI numbers, hyprlock, fuzzel, digital clock. Bundled in `dots/.local/share/fonts/`.
+- **Mikhak** - Variable font for primary UI/title/expressive font in Quickshell. Bundled in `dots/.local/share/fonts/mikhak/`.
+
 ## illogical-impulse-hyprland
+- `bluez`
+  - Bluetooth support.
 - `hyprland`
-  - Surely needed.
-- `hyprsunset`
-  - Used in Quickshell config.
+  - Core compositor.
+- `hyprland-protocols`
+  - Hyprland protocol definitions.
+- `hyprwayland-scanner`
+  - Wayland protocol scanner for Hyprland.
+- `hyprutils`
+  - Hyprland utility library.
+- `hyprgraphics`
+  - Hyprland graphics library.
+- `hyprlang`
+  - Hyprland config language library.
+- `hyprcursor`
+  - Hyprland cursor library.
+- `aquamarine`
+  - Hyprland renderer backend.
+- `xdg-desktop-portal-hyprland`
+  - XDG desktop portal for Hyprland.
+- `hyprwire`
+  - Hyprland screen sharing.
+- `hyprtoolkit`
+  - Hyprland toolkit library.
+- `hyprland-qt-support`
+  - Qt support for Hyprland.
 - `wl-clipboard`
-  - Surely needed.
+  - Wayland clipboard utilities.
 
 ## illogical-impulse-kde
 - `bluedevil`
@@ -118,8 +149,7 @@ Tips:
 - `dolphin`
   - Used in Hyprland and Quickshell config.
 - `systemsettings`
-  - Used in Hyprland `keybinds.conf`.
-
+  - Used in Hyprland keybinds.
 
 ## illogical-impulse-portal
 - `xdg-desktop-portal`
@@ -149,7 +179,7 @@ Tips:
 
 ## illogical-impulse-screencapture
 - `hyprshot`
-  - Used in Hyprland `keybinds.conf` as fallback.
+  - Used in Hyprland keybinds as fallback.
 - `slurp`
   - Used in Hyprland and Quickshell config.
 - `swappy`
@@ -160,7 +190,6 @@ Tips:
   - Used as data for tesseract.
 - `wf-recorder`
   - Used in Quickshell config.
-
 
 ## illogical-impulse-toolkit
 - `upower`
@@ -175,7 +204,7 @@ Tips:
   - Used in Hyprland and Quickshell config; its config is also included.
 - `glib2`
   - Provides executable `gsettings`
-  - Used in install script, also in matugen and quickshell config.
+  - Used in install script and quickshell config.
 - `imagemagick`
   - Provides executable: `magick`
   - Used in Quickshell config.
@@ -193,42 +222,8 @@ Tips:
   - Used in Hyprland config.
 - `libqalculate`
   - Used in Quickshell config, providing math ability in searchbar.
-  - Note that `qalc` is the needed executable. In Arch Linux [libqalculate](https://archlinux.org/packages/extra/x86_64/libqalculate) provides it, but in Fedora [qalculate](https://packages.fedoraproject.org/pkgs/libqalculate/qalculate/fedora-43.html#files) does and [libqalculate](https://packages.fedoraproject.org/pkgs/libqalculate/libqalculate/fedora-43.html#files) does not.
-
+  - Note that `qalc` is the needed executable. In Arch Linux [libqalculate](https://archlinux.org/packages/extra/x86_64/libqalculate) provides it.
 
 # Actual packages
-## illogical-impulse-quickshell-git
-- Pinned commit.
-- Also with extra dependencies (mainly Qt things) needed by the illogical-impulse Quickshell config.
-
-Extra dependencies.
-- `qt6-base`
-- `qt6-declarative`
-- `qt6-5compat`
-- `qt6-avif-image-plugin`
-- `qt6-imageformats`
-- `qt6-multimedia`
-- `qt6-positioning`
-- `qt6-quicktimeline`
-- `qt6-sensors`
-- `qt6-svg`
-- `qt6-tools`
-- `qt6-translations`
-- `qt6-virtualkeyboard`
-- `qt6-wayland`
-- `kirigami`
-- `kdialog`
-- `syntax-highlighting`
-- `vulkan-headers`
-- `libdrm`
-- `cpptrace`
-- `jemalloc`
-- `mesa`
-
-## illogical-impulse-bibata-modern-classic-bin
-- [source](https://github.com/ful1e5/Bibata_Cursor)
-- Used in Hyprland config, not necessary.
-
-## illogical-impulse-microtex-git
-- [source](https://github.com/NanoMichael/MicroTeX)
-- This package will be installed as `/opt/MicroTeX`.
+## illogical-impulse-oreo-cursors-bin
+- Pre-built cursor theme package.

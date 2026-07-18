@@ -21,7 +21,6 @@ esac
 case "${SKIP_QUICKSHELL}" in
   true) true;;
   *)
-     # Should overwriting the whole directory not only ~/.config/quickshell/ii/ cuz https://github.com/end-4/dots-hyprland/issues/2294#issuecomment-3448671064
     install_dir__sync dots/.config/quickshell "$XDG_CONFIG_HOME"/quickshell
     ;;
 esac
@@ -61,18 +60,22 @@ case "${SKIP_HYPRLAND}" in
       esac
     done
     for i in hypridle.conf ; do
-      if [[ "${INSTALL_VIA_NIX}" == true ]]; then
-        install_file__auto_backup "dots-extra/via-nix/$i" "${XDG_CONFIG_HOME}/hypr/$i"
-      else
-        install_file__auto_backup "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
-      fi
+      install_file__auto_backup "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
     done
-    if [ "$OS_GROUP_ID" = "fedora" ];then
-      v bash -c "printf \"# For fedora to setup polkit\nexec-once = /usr/libexec/kf6/polkit-kde-authentication-agent-1\n\" >> ${XDG_CONFIG_HOME}/hypr/hyprland/execs.conf"
-    fi
 
     install_dir__ignore_existing "dots/.config/hypr/custom" "${XDG_CONFIG_HOME}/hypr/custom"
     ;;
 esac
 
 install_file "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}"/icons/illogical-impulse.svg
+
+# Install bundled fonts
+if [ -d "dots/.local/share/fonts" ]; then
+  install_dir__sync "dots/.local/share/fonts" "${XDG_DATA_HOME}/fonts"
+  fc-cache -fv "${XDG_DATA_HOME}/fonts" >/dev/null 2>&1
+fi
+
+# Install pywal templates
+if [ -d "dots/.config/wal/templates" ]; then
+  install_dir__sync "dots/.config/wal/templates" "${XDG_CONFIG_HOME}/wal/templates"
+fi

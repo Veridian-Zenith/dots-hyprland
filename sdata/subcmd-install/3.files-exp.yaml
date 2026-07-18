@@ -9,7 +9,7 @@
 version: "1.0"
 user_preferences:
   shell: "fish" # fish | zsh
-  terminal: "foot" # kitty | foot
+  terminal: "kitty" # kitty | foot
   keybindings: "default" # default | vim
 patterns:
   # Always install these files
@@ -60,6 +60,10 @@ patterns:
   - from: "dots/.local/share/icons"
     to: "$XDG_DATA_HOME/icons"
     mode: "soft"
+  # Bundled fonts
+  - from: "dots/.local/share/fonts"
+    to: "$XDG_DATA_HOME/fonts"
+    mode: "soft"
   # Fontconfig (default - fontsets handled separately if FONTSET_DIR_NAME is set)
   - from: "dots/.config/fontconfig"
     to: "$XDG_CONFIG_HOME/fontconfig"
@@ -67,9 +71,6 @@ patterns:
   # MISC config directories (other .config directories)
   - from: "dots/.config/fuzzel"
     to: "$XDG_CONFIG_HOME/fuzzel"
-    mode: "sync"
-  - from: "dots/.config/matugen"
-    to: "$XDG_CONFIG_HOME/matugen"
     mode: "sync"
   - from: "dots/.config/mpv"
     to: "$XDG_CONFIG_HOME/mpv"
@@ -85,6 +86,10 @@ patterns:
     mode: "sync"
   - from: "dots/.config/xdg-desktop-portal"
     to: "$XDG_CONFIG_HOME/xdg-desktop-portal"
+    mode: "sync"
+  # Pywal templates
+  - from: "dots/.config/wal"
+    to: "$XDG_CONFIG_HOME/wal"
     mode: "sync"
   # MISC config files (individual files in .config)
   - from: "dots/.config/chrome-flags.conf"

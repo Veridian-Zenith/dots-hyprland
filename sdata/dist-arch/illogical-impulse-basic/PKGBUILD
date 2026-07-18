@@ -9,7 +9,6 @@ depends=(
   bc
   coreutils
   cliphist
-  cmake
   curl
   wget
   ripgrep

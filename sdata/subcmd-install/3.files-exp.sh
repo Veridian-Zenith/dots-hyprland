@@ -1,15 +1,12 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
-# See https://github.com/end-4/dots-hyprland/issues/2137
-#
 # Stage 1 todos:
 # TODO: Properly handle hyprland config, ~/.config/hypr/hyprland.conf should be overwritten only when firstrun
 # TODO: add --exp-files-path <path>   Use <path> instead of the default yaml config
 # TODO: add --exp-files-regen         Force copy the default config to ${EXP_FILE_PATH} (auto do this when not existed)
 # TODO: Implement versioning, i.e. when user-defined yaml config file has version number mismatch with the default one, produce error. If only minor version number is not the same, the error can be ommitted via --exp-file-no-strict .
 # TODO: add --exp-files-no-strict     Ignore error when minor version number is not the same
-# TODO: When --via-nix is specified, use dots-extra/vianix/hypridle.conf instead
 #
 # Stage 2 todos:
 # TODO: Implement bool key symlink (both read-write and read-only), when the value of `symlink` is true, then instead using `rsync` or `cp`, use `ln`.

@@ -6,16 +6,18 @@ pkgdesc='Illogical Impulse Fonts and Theming Dependencies'
 arch=(any)
 license=(None)
 depends=(
-  adw-gtk-theme-git
+  adw-gtk-theme
   eza
   fish
   fontconfig
   kitty
-  matugen
+  otf-atkinson-hyperlegible-next
   otf-space-grotesk
   starship
+  ttf-firacode-nerd
+  ttf-iosevkatermslab-nerd
   ttf-jetbrains-mono-nerd
-  ttf-material-symbols-variable-git
+  ttf-material-symbols-variable
   ttf-readex-pro
   ttf-rubik-vf
   ttf-twemoji
